@@ -1,0 +1,31 @@
+name: testing_pipeline
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0/4 * * *"
+  pull_request:
+    branches:
+      - main
+      - sdk-preview
+    paths:
+      - .github/workflows/workflow.yml
+      - ./setup.sh
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: check out repo
+      uses: actions/checkout@v2
+    - name: azure login
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+    - name: setup
+      run: bash setup.sh
+      working-directory: ./
+      continue-on-error: true
+    - name: run job
+      env:
+        DATA_SRC: ${{secrets.DATA_SRC}}
+      run: bash -x run-job.sh pipeline.yml
+      working-directory: ./
