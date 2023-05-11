@@ -1,0 +1,63 @@
+$schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
+type: pipeline
+display_name: Model Deployment to Elastic
+jobs:
+  read_data:
+    type: command
+    outputs:
+      fetched_data: 
+        mode: upload
+    code: data
+    environment: azureml:ModelTraining@latest
+    compute: azureml:GPU-05559-01
+    command: >-
+      python read_data.py 
+      --fetched_data ${{outputs.fetched_data}}
+      
+  preprocess_data:
+    type: command
+    inputs:
+      real_data: ${{parent.jobs.read_data.outputs.fetched_data}}
+    outputs:
+      transformed_data: 
+        mode: upload
+    code: prepare_data
+    environment: azureml:ModelTraining@latest
+    compute: azureml:GPU-05559-01
+    command: >-
+      python preprocessing.py 
+      --real_data ${{inputs.real_data}}
+      --transformed_data ${{outputs.transformed_data}}
+
+  huggingface:
+    type: command
+    code: huggingface
+    inputs:
+      prepped_data: ${{parent.jobs.preprocess_data.outputs.transformed_data}}
+    outputs:
+      status_output:
+        mode: upload
+    environment: azureml:ModelTraining@latest
+    compute: azureml:GPU-05559-01
+    command: >- 
+      python huggingface.py 
+      --prepped_data ${{inputs.prepped_data}}
+      --status_output ${{outputs.status_output}}
+    
+  elastic:
+    type: command
+    code: elastic
+    inputs:
+      status_input: ${{parent.jobs.huggingface.outputs.status_output}}
+    environment: azureml:ElandRequirments@latest
+    compute: azureml:GPU-05559-01
+    command: >-
+      python eland_import_hub_model.py
+      --status_input ${{inputs.status_input}}
+      --url https://49a88e589a0a4bad9350451ebeae8797.es.eastus2.azure.elastic-cloud.com:9243
+      --cloud-id Elastic-05559-s-001:ZWFzdHVzMi5henVyZS5lbGFzdGljLWNsb3VkLmNvbTo0NDMkNDlhODhlNTg5YTBhNGJhZDkzNTA0NTFlYmVhZTg3OTckMDdlYjU1NzhjODdlNGI3MWI5NmIwNjY0ZmY3NWI4ODc=
+      --hub-model-id yashveer11/final_model_category
+      --task-type text_classification
+      --es-api-key MEowRjhJY0I2dGg1ZG05ZHloNDU6Qmc5ZnJxVUxTRTZEcVBRNjFZa1d6QQ==
+      --clear-previous
+      --start
