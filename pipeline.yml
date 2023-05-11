@@ -49,7 +49,7 @@ jobs:
     code: elastic
     inputs:
       status_input: ${{parent.jobs.huggingface.outputs.status_output}}
-    environment: azureml:ElandRequirments@latest
+    environment: azureml:ElandRequriments@latest
     compute: azureml:GPU-05559-01
     command: >-
       python eland_import_hub_model.py
