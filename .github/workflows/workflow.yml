@@ -4,6 +4,9 @@ on:
     branches:
       - main
       - sdk-preview
+  push:
+    branches:
+      - main
     paths:
       - .github/workflows/workflow.yml
       - ./setup.sh
