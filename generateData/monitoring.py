@@ -4,7 +4,7 @@ import numpy as np
 
 es = Elasticsearch(
 hosts = "https://485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com:9243",
-api_key = "aXhnalpZWUJuZm1CWDZDTDhBUXI6VlNEb2xkbTRRNi1IWkdBNlVXanhXdw=="
+api_key = "Elastic_API_KEY"
 )
 
 #### extract index from elastic
@@ -97,7 +97,7 @@ LATEST_DATA_CONTAINER_NAME = "testcontainer01"
 EMAIL_CONTAINER_NAME = "emails-container"
 
 blobService = BlobServiceClient.from_connection_string(
-    "DefaultEndpointsProtocol=https;AccountName=mlpipelinetest01;AccountKey=0WX38QP+B4uL0RC6B8VGwB3qEN9Z4HTuQCBDYz/SSndLBoz2RlS8CqhC6uouR4eqS9Goo2P29GTo+AStHa+Qgw==;EndpointSuffix=core.windows.net")
+    "AZURE_BLOB_SEC")
 
 print("\nList blobs in the container")
 LatestDataContainer = blobService.get_container_client(LATEST_DATA_CONTAINER_NAME)
