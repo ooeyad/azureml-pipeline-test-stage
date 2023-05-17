@@ -54,7 +54,7 @@ jobs:
     command: >-
       python eland_import_hub_model.py
       --status_input ${{inputs.status_input}}
-      --url https://49a88e589a0a4bad9350451ebeae8797.es.eastus2.azure.elastic-cloud.com:9243
+      --url https://49a88e589a0a4bad9350451ebeae8797.es.eastus2.azure.elastic-cloud.com:9243/
       --hub-model-id yashveer11/final_model_category
       --task-type text_classification
       --es-api-key MEowRjhJY0I2dGg1ZG05ZHloNDU6Qmc5ZnJxVUxTRTZEcVBRNjFZa1d6QQ==
