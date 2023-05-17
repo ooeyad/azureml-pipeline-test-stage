@@ -1,6 +1,5 @@
 name: testing_pipeline
 on:
-
   pull_request:
     branches:
       - main
