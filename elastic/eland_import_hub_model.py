@@ -97,7 +97,7 @@ def get_arg_parser():
     parser.add_argument(
         "--es-api-key",
         required=False,
-        default=os.environ.get("Y2FYbkxZZ0I2dGg1ZG05ZEw2S1A6SjMxR2dnWGZURHVlREpzT1FrZVp1QQ=="),
+        default=os.environ.get("--es-api-key ApiKey Y2FYbkxZZ0I2dGg1ZG05ZEw2S1A6SjMxR2dnWGZURHVlREpzT1FrZVp1QQ=="),
         help="API key for Elasticsearch"
     )
     parser.add_argument(
