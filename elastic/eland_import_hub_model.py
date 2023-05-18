@@ -66,7 +66,7 @@ def get_arg_parser():
     )
     location_args.add_argument(
         "--cloud-id",
-        default=os.environ.get("Elastic-05559-d-002:ZWFzdHVzLmF6dXJlLmVsYXN0aWMtY2xvdWQuY29tOjQ0MyQ0ODVjZTM5MzFmMWU0YjYzOTNmM2EyNTZkOTZiYTc1ZSQ3Njc4ZmQyZjA2NWI0YWM1OTRhYjVlMmVjMTMxYjI3Mw=="),
+        default=os.environ.get("Elastic-05559-s-001:ZWFzdHVzMi5henVyZS5lbGFzdGljLWNsb3VkLmNvbTo0NDMkNDlhODhlNTg5YTBhNGJhZDkzNTA0NTFlYmVhZTg3OTckMDdlYjU1NzhjODdlNGI3MWI5NmIwNjY0ZmY3NWI4ODc="),
         help="Cloud ID as found in the 'Manage Deployment' page of an Elastic Cloud deployment",
     )
     parser.add_argument(
@@ -97,7 +97,7 @@ def get_arg_parser():
     parser.add_argument(
         "--es-api-key",
         required=False,
-        default=os.environ.get("NzE1N0RJVUJXa2pPVFJ6bFFZeUg6dlJrUHNmLVJTX0tmdXMwczdqSHprUQ=="),
+        default=os.environ.get("Y2FYbkxZZ0I2dGg1ZG05ZEw2S1A6SjMxR2dnWGZURHVlREpzT1FrZVp1QQ=="),
         help="API key for Elasticsearch"
     )
     parser.add_argument(
@@ -228,21 +228,21 @@ with tempfile.TemporaryDirectory() as tmp_dir:
          logger.info(f"Stopping deployment for model with id '{ptm.model_id}'")
 #          ptm.stop()
 #          POST _ml/trained_models/<model_id>/deployment/_stop
-         url = "https://485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com:9243/_ml/trained_models/yashveer11__final_model_category/deployment/_stop?force=true"
-         auth = HTTPBasicAuth('apikey', 'ApiKey NzE1N0RJVUJXa2pPVFJ6bFFZeUg6dlJrUHNmLVJTX0tmdXMwczdqSHprUQ==')
-         response = req.request("POST", url, headers={'Host': '485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com:9243',
+         url = "https://49a88e589a0a4bad9350451ebeae8797.es.eastus2.azure.elastic-cloud.com:9243/_ml/trained_models/yashveer11__final_model_category/deployment/_stop?force=true"
+         auth = HTTPBasicAuth('apikey', 'ApiKey Y2FYbkxZZ0I2dGg1ZG05ZEw2S1A6SjMxR2dnWGZURHVlREpzT1FrZVp1QQ==')
+         response = req.request("POST", url, headers={'Host': '49a88e589a0a4bad9350451ebeae8797.es.eastus2.azure.elastic-cloud.com:9243',
                                                                    'Content-Type': 'application/json',
-                                                                   "Authorization": "ApiKey NzE1N0RJVUJXa2pPVFJ6bFFZeUg6dlJrUHNmLVJTX0tmdXMwczdqSHprUQ=="})
+                                                                   "Authorization": "ApiKey Y2FYbkxZZ0I2dGg1ZG05ZEw2S1A6SjMxR2dnWGZURHVlREpzT1FrZVp1QQ=="})
 
          logger.info(f"Deleting model with id '{ptm.model_id}'") 
 #           try:
 #             ptm.delete()
 #           except:
-         url = "https://485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com:9243/_ml/trained_models/yashveer11__final_model_category?force=true"
-         auth = HTTPBasicAuth('apikey', 'ApiKey NzE1N0RJVUJXa2pPVFJ6bFFZeUg6dlJrUHNmLVJTX0tmdXMwczdqSHprUQ==')
-         response = req.request("DELETE", url, headers={'Host': '485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com:9243',
+         url = "https://49a88e589a0a4bad9350451ebeae8797.es.eastus2.azure.elastic-cloud.com:9243/_ml/trained_models/yashveer11__final_model_category?force=true"
+         auth = HTTPBasicAuth('apikey', 'ApiKey Y2FYbkxZZ0I2dGg1ZG05ZEw2S1A6SjMxR2dnWGZURHVlREpzT1FrZVp1QQ==')
+         response = req.request("DELETE", url, headers={'Host': '49a88e589a0a4bad9350451ebeae8797.es.eastus2.azure.elastic-cloud.com:9243',
                                                                      'Content-Type': 'application/json',
-                                                                     "Authorization": "ApiKey NzE1N0RJVUJXa2pPVFJ6bFFZeUg6dlJrUHNmLVJTX0tmdXMwczdqSHprUQ=="})
+                                                                     "Authorization": "ApiKey Y2FYbkxZZ0I2dGg1ZG05ZEw2S1A6SjMxR2dnWGZURHVlREpzT1FrZVp1QQ=="})
          logger.info("supposdly done?")
             
      else:
