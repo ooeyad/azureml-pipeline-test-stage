@@ -149,7 +149,7 @@ def get_es_client(cli_args):
             'verify_certs': cli_args.insecure,
             'ca_certs': cli_args.ca_certs
         }
-
+        logger.info(f"cli_args.url")
         # Deployment location
         if cli_args.url:
             es_args['hosts'] = cli_args.url
