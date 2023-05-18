@@ -82,18 +82,18 @@ def get_arg_parser():
              "e.g. bert-large-cased-finetuned-conll03-english."
              "When left unspecified, this will be auto-created from the `hub-id`",
     )
-#     parser.add_argument(
-#         "-u", "--es-username",
-#         required=False,
-#         default=os.environ.get("iyad.alswaiti@external.stellantis.com"),
-#         help="Username for Elasticsearch"
-#     )
-#     parser.add_argument(
-#         "-p", "--es-password",
-#         required=False,
-#         default=os.environ.get("Jordan123456789@"),
-#         help="Password for the Elasticsearch user specified with -u/--username"
-#     )
+    parser.add_argument(
+        "-u", "--es-username",
+        required=False,
+        default=os.environ.get("iyad.alswaiti@external.stellantis.com"),
+        help="Username for Elasticsearch"
+    )
+    parser.add_argument(
+        "-p", "--es-password",
+        required=False,
+        default=os.environ.get("Jordan123456789@"),
+        help="Password for the Elasticsearch user specified with -u/--username"
+    )
     parser.add_argument(
         "--es-api-key",
         required=False,
