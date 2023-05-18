@@ -223,6 +223,7 @@ with tempfile.TemporaryDirectory() as tmp_dir:
   ptm = PyTorchModel(es, args.es_model_id if args.es_model_id else tm.elasticsearch_model_id())
   model_exists = es.options(ignore_status=404).ml.get_trained_models(model_id=ptm.model_id).meta.status == 200
 
+
   if model_exists:
      if args.clear_previous:
          logger.info(f"Stopping deployment for model with id '{ptm.model_id}'")
