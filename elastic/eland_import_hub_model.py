@@ -61,7 +61,7 @@ def get_arg_parser():
     location_args = parser.add_mutually_exclusive_group(required=True)
     location_args.add_argument(
         "--url",
-        default=os.environ.get("https://485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com"),
+        default=os.environ.get("https://49a88e589a0a4bad9350451ebeae8797.es.eastus2.azure.elastic-cloud.com"),
         help="An Elasticsearch connection URL, e.g. http://localhost:9200",
     )
     location_args.add_argument(
