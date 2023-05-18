@@ -149,9 +149,7 @@ def get_es_client(cli_args):
             'verify_certs': cli_args.insecure,
             'ca_certs': cli_args.ca_certs
         }
-        logging.info("url:" + str(cli_args.url))
-        logging.info("cloud_id:" + str(cli_args.cloud_id))
-        logging.info("api_key:" + str(cli_args.api_key))
+
         # Deployment location
         if cli_args.url:
             es_args['hosts'] = cli_args.url
