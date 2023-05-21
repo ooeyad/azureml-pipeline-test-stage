@@ -30,9 +30,10 @@ def get_arg_parser():
     parser.add_argument("--status_input", type=str, help="Path to fetched data")
     location_args = parser.add_mutually_exclusive_group(required=True)
     location_args.add_argument(
-        "--argTest",
-        default="option1",
-        help="option1",
+        "--cloud-id",
+        default=os.environ.get(
+            "Elastic-05559-s-001:ZWFzdHVzMi5henVyZS5lbGFzdGljLWNsb3VkLmNvbTo0NDMkNDlhODhlNTg5YTBhNGJhZDkzNTA0NTFlYmVhZTg3OTckMDdlYjU1NzhjODdlNGI3MWI5NmIwNjY0ZmY3NWI4ODc="),
+        help="Cloud ID as found in the 'Manage Deployment' page of an Elastic Cloud deployment",
     )
 
     # location_args.add_argument(
