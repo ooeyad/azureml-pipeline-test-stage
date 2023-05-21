@@ -30,10 +30,16 @@ def get_arg_parser():
     parser.add_argument("--status_input", type=str, help="Path to fetched data")
     location_args = parser.add_mutually_exclusive_group(required=True)
     location_args.add_argument(
-        "--url",
-        default=os.environ.get("https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com"),
-        help="An Elasticsearch connection URL, e.g. http://localhost:9200",
+        "--argTest",
+        default="option1",
+        help="option1",
     )
+
+    # location_args.add_argument(
+    #     "--url",
+    #     default=os.environ.get("https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com"),
+    #     help="An Elasticsearch connection URL, e.g. http://localhost:9200",
+    # )
     # location_args.add_argument(
     #     "--cloud-id",
     #     default=os.environ.get(
@@ -66,18 +72,18 @@ def get_arg_parser():
              "e.g. bert-large-cased-finetuned-conll03-english."
              "When left unspecified, this will be auto-created from the `hub-id`",
     )
-    #     parser.add_argument(
-    #         "-u", "--es-username",
-    #         required=False,
-    #         default=os.environ.get("iyad.alswaiti@external.stellantis.com"),
-    #         help="Username for Elasticsearch"
-    #     )
-    #     parser.add_argument(
-    #         "-p", "--es-password",
-    #         required=False,
-    #         default=os.environ.get("Jordan123456789@"),
-    #         help="Password for the Elasticsearch user specified with -u/--username"
-    #     )
+    parser.add_argument(
+        "-u", "--es-username",
+        required=False,
+        default=os.environ.get("iyad.alswaiti@external.stellantis.com"),
+        help="Username for Elasticsearch"
+        )
+    parser.add_argument(
+        "-p", "--es-password",
+        required=False,
+        default=os.environ.get("Jordan123456789@"),
+        help="Password for the Elasticsearch user specified with -u/--username"
+        )
     parser.add_argument(
         "--es-api-key",
         required=False,
