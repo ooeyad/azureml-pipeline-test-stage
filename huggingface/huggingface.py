@@ -13,6 +13,8 @@ from transformers import EvalPrediction
 import torch
 import os
 from pathlib import Path
+from azure.identity import DefaultAzureCredential
+from azure.keyvault.secrets import SecretClient
 import argparse
 labels = []
 def get_args():
@@ -102,8 +104,12 @@ def perform_training():
 
     # [id2label[idx] for idx, label in enumerate(example['labels']) if label == 1.0]
     encoded_dataset.set_format("torch")
-    access_token = str(os.environ.get("HF_ACCESS_TOKEN"))
-    # access_token = "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"
+    credential = DefaultAzureCredential()
+    vault_url = "https://kv-05559-s-adf.vault.azure.net"
+    secret_client = SecretClient(vault_url=vault_url, credential=credential)
+    secret_name = "hfAccessToken"
+    access_token = secret_client.get_secret(secret_name).value
+
     login(access_token)
 
     model = AutoModelForSequenceClassification.from_pretrained("yashveer11/final_model_category",
