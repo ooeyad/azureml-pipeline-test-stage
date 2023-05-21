@@ -32,13 +32,13 @@ def get_arg_parser():
     location_args.add_argument(
         "--url",
         # default=os.environ.get("https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com"),
-        default=os.environ.get("https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com"),
+        default="https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com",
         help="An Elasticsearch connection URL, e.g. http://localhost:9200",
     )
     location_args.add_argument(
         "--cloud-id",
-        default=os.environ.get(
-            "Elastic-05559-s-001:ZWFzdHVzMi5henVyZS5lbGFzdGljLWNsb3VkLmNvbTo0NDMkNDlhODhlNTg5YTBhNGJhZDkzNTA0NTFlYmVhZTg3OTckMDdlYjU1NzhjODdlNGI3MWI5NmIwNjY0ZmY3NWI4ODc="),
+        default=
+            "Elastic-05559-s-001:ZWFzdHVzMi5henVyZS5lbGFzdGljLWNsb3VkLmNvbTo0NDMkNDlhODhlNTg5YTBhNGJhZDkzNTA0NTFlYmVhZTg3OTckMDdlYjU1NzhjODdlNGI3MWI5NmIwNjY0ZmY3NWI4ODc=",
         help="Cloud ID as found in the 'Manage Deployment' page of an Elastic Cloud deployment",
     )
 
@@ -76,19 +76,19 @@ def get_arg_parser():
     parser.add_argument(
         "-u", "--es-username",
         required=False,
-        default=os.environ.get("iyad.alswaiti@external.stellantis.com"),
+        default="iyad.alswaiti@external.stellantis.com",
         help="Username for Elasticsearch"
         )
     parser.add_argument(
         "-p", "--es-password",
         required=False,
-        default=os.environ.get("Jordan123456789@"),
+        default="Jordan123456789@",
         help="Password for the Elasticsearch user specified with -u/--username"
         )
     parser.add_argument(
         "--es-api-key",
         required=False,
-        default=os.environ.get("Y2FYbkxZZ0I2dGg1ZG05ZEw2S1A6SjMxR2dnWGZURHVlREpzT1FrZVp1QQ=="),
+        default="Y2FYbkxZZ0I2dGg1ZG05ZEw2S1A6SjMxR2dnWGZURHVlREpzT1FrZVp1QQ==",
         help="API key for Elasticsearch"
     )
     parser.add_argument(
