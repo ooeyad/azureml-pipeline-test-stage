@@ -101,7 +101,7 @@ def perform_training():
 
     # [id2label[idx] for idx, label in enumerate(example['labels']) if label == 1.0]
     encoded_dataset.set_format("torch")
-    access_token = os.environ.get("HF_ACCESS_TOKEN")
+    access_token = str(os.environ.get("HF_ACCESS_TOKEN"))
     # access_token = "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"
     login(access_token)
 
