@@ -43,7 +43,7 @@ jobs:
       python huggingface.py 
       --prepped_data ${{inputs.prepped_data}}
       --status_output ${{outputs.status_output}}
-      --access_token ${{HF_ACCESS_TOKEN}}
+      --access_token ${{secrets.HF_ACCESS_TOKEN}}
     
   elastic:
     type: command
