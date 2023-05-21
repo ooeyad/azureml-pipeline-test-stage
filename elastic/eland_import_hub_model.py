@@ -30,6 +30,12 @@ def get_arg_parser():
     parser.add_argument("--status_input", type=str, help="Path to fetched data")
     location_args = parser.add_mutually_exclusive_group(required=True)
     location_args.add_argument(
+        "--url",
+        # default=os.environ.get("https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com"),
+        default=os.environ.get("https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com"),
+        help="An Elasticsearch connection URL, e.g. http://localhost:9200",
+    )
+    location_args.add_argument(
         "--cloud-id",
         default=os.environ.get(
             "Elastic-05559-s-001:ZWFzdHVzMi5henVyZS5lbGFzdGljLWNsb3VkLmNvbTo0NDMkNDlhODhlNTg5YTBhNGJhZDkzNTA0NTFlYmVhZTg3OTckMDdlYjU1NzhjODdlNGI3MWI5NmIwNjY0ZmY3NWI4ODc="),
@@ -41,12 +47,6 @@ def get_arg_parser():
     #     default=os.environ.get("https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com"),
     #     help="An Elasticsearch connection URL, e.g. http://localhost:9200",
     # )
-    # location_args.add_argument(
-    #     "--cloud-id",
-    #     default=os.environ.get(
-    #         "Elastic-05559-s-001:ZWFzdHVzMi5henVyZS5lbGFzdGljLWNsb3VkLmNvbTo0NDMkNDlhODhlNTg5YTBhNGJhZDkzNTA0NTFlYmVhZTg3OTckMDdlYjU1NzhjODdlNGI3MWI5NmIwNjY0ZmY3NWI4ODc="),
-    #     help="Cloud ID as found in the 'Manage Deployment' page of an Elastic Cloud deployment",
-    # )
     #
     # parser.add_argument(
     #     "--cloud-id",
@@ -55,11 +55,11 @@ def get_arg_parser():
     #     help="Cloud ID as found in the 'Manage Deployment' page of an Elastic Cloud deployment",
     # )
 
-    parser.add_argument(
-        "--url",
-        default=os.environ.get("https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com"),
-        help="An Elasticsearch connection URL, e.g. http://localhost:9200",
-    )
+    # parser.add_argument(
+    #     "--url",
+    #     default=os.environ.get("https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com"),
+    #     help="An Elasticsearch connection URL, e.g. http://localhost:9200",
+    # )
     parser.add_argument(
         "--hub-model-id",
         default="bart-large-mnli",
