@@ -11,11 +11,30 @@ from elasticsearch import AuthenticationException, Elasticsearch
 import requests as req
 from eland.ml.pytorch.transformers import SUPPORTED_TASK_TYPES
 from requests.auth import HTTPBasicAuth
+from eland.ml.pytorch import PyTorchModel
+
+try:
+    from eland.ml.pytorch.transformers import (
+        SUPPORTED_TASK_TYPES,
+        TaskTypeError,
+        TransformerModel,
+    )
+except ModuleNotFoundError as e:
+    logger = logging.getLogger(__name__)
+    logger.error(textwrap.dedent(f"""\
+         \033[31mFailed to run because module '{e.name}' is not available.\033[0m
+
+         This script requires PyTorch extras to run. You can install these by running:
+
+             \033[1m{sys.executable} -m pip install 'eland[pytorch]'
+         \033[0m"""))
+    exit(1)
+
 
 MODEL_HUB_URL = "https://huggingface.co"
 
 proxies = {
-    'aiproxy.appl.chrysler.com:9080'
+   'aiproxy.appl.chrysler.com:9080'
 }
 
 # Configure logging
@@ -25,46 +44,40 @@ logger.setLevel(logging.INFO)
 
 
 def get_arg_parser():
-    #     parser = argparse.ArgumentParser()
+#     parser = argparse.ArgumentParser()
     parser = argparse.ArgumentParser("elastic")
     parser.add_argument("--status_input", type=str, help="Path to fetched data")
     location_args = parser.add_mutually_exclusive_group(required=True)
-    location_args.add_argument(
-        "--url",
-        # default=os.environ.get("https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com"),
-        default="https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com",
-        help="An Elasticsearch connection URL, e.g. http://localhost:9200",
-    )
-    location_args.add_argument(
-        "--cloud-id",
-        default=
-            "Elastic-05559-s-001:ZWFzdHVzMi5henVyZS5lbGFzdGljLWNsb3VkLmNvbTo0NDMkNDlhODhlNTg5YTBhNGJhZDkzNTA0NTFlYmVhZTg3OTckMDdlYjU1NzhjODdlNGI3MWI5NmIwNjY0ZmY3NWI4ODc=",
-        help="Cloud ID as found in the 'Manage Deployment' page of an Elastic Cloud deployment",
-    )
+    location_args.add_argument("--option1", action="store_true", help="Option 1")
 
     # location_args.add_argument(
     #     "--url",
-    #     default=os.environ.get("https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com"),
+    #     default=os.environ.get("https://485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com"),
     #     help="An Elasticsearch connection URL, e.g. http://localhost:9200",
     # )
-    #
-    # parser.add_argument(
+    # location_args.add_argument(
     #     "--cloud-id",
-    #     default=os.environ.get(
-    #         "Elastic-05559-s-001:ZWFzdHVzMi5henVyZS5lbGFzdGljLWNsb3VkLmNvbTo0NDMkNDlhODhlNTg5YTBhNGJhZDkzNTA0NTFlYmVhZTg3OTckMDdlYjU1NzhjODdlNGI3MWI5NmIwNjY0ZmY3NWI4ODc="),
+    #     default=os.environ.get("Elastic-05559-d-002:ZWFzdHVzLmF6dXJlLmVsYXN0aWMtY2xvdWQuY29tOjQ0MyQ0ODVjZTM5MzFmMWU0YjYzOTNmM2EyNTZkOTZiYTc1ZSQ3Njc4ZmQyZjA2NWI0YWM1OTRhYjVlMmVjMTMxYjI3Mw=="),
     #     help="Cloud ID as found in the 'Manage Deployment' page of an Elastic Cloud deployment",
-    # )
-
-    # parser.add_argument(
-    #     "--url",
-    #     default=os.environ.get("https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com"),
-    #     help="An Elasticsearch connection URL, e.g. http://localhost:9200",
     # )
     parser.add_argument(
         "--hub-model-id",
         default="bart-large-mnli",
         help="The model ID in the Hugging Face model hub, "
              "e.g. dbmdz/bert-large-cased-finetuned-conll03-english",
+    )
+    parser.add_argument(
+        "--cloud-id",
+        default=os.environ.get("ES_CLOUD_ID"),
+        # default=os.environ.get("Elastic-05559-d-002:ZWFzdHVzLmF6dXJlLmVsYXN0aWMtY2xvdWQuY29tOjQ0MyQ0ODVjZTM5MzFmMWU0YjYzOTNmM2EyNTZkOTZiYTc1ZSQ3Njc4ZmQyZjA2NWI0YWM1OTRhYjVlMmVjMTMxYjI3Mw=="),
+        help="Cloud ID as found in the 'Manage Deployment' page of an Elastic Cloud deployment",
+    )
+
+    parser.add_argument(
+        "--url",
+        default=os.environ.get("ES_URL"),
+        # default=os.environ.get("https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com"),
+        help="An Elasticsearch connection URL, e.g. http://localhost:9200",
     )
     parser.add_argument(
         "--es-model-id",
@@ -76,19 +89,22 @@ def get_arg_parser():
     parser.add_argument(
         "-u", "--es-username",
         required=False,
-        default="iyad.alswaiti@external.stellantis.com",
+        default=os.environ.get("ES_USER"),
+        # default=os.environ.get("iyad.alswaiti@external.stellantis.com"),
         help="Username for Elasticsearch"
-        )
+    )
     parser.add_argument(
         "-p", "--es-password",
         required=False,
-        default="Jordan123456789@",
+        default=os.environ.get("ES_USER_PASS"),
+        # default=os.environ.get("Jordan123456789@"),
         help="Password for the Elasticsearch user specified with -u/--username"
-        )
+    )
     parser.add_argument(
         "--es-api-key",
         required=False,
-        default="Y2FYbkxZZ0I2dGg1ZG05ZEw2S1A6SjMxR2dnWGZURHVlREpzT1FrZVp1QQ==",
+        default=os.environ.get("ES_API_KEY"),
+        # default=os.environ.get("NzE1N0RJVUJXa2pPVFJ6bFFZeUg6dlJrUHNmLVJTX0tmdXMwczdqSHprUQ=="),
         help="API key for Elasticsearch"
     )
     parser.add_argument(
@@ -142,8 +158,8 @@ def get_es_client(cli_args):
         }
 
         # Deployment location
-        # if cli_args.url:
-        #     es_args['hosts'] = cli_args.url
+        if cli_args.url:
+            es_args['hosts'] = cli_args.url
 
         if cli_args.cloud_id:
             es_args['cloud_id'] = cli_args.cloud_id
@@ -159,7 +175,6 @@ def get_es_client(cli_args):
             es_args['basic_auth'] = (cli_args.es_username, cli_args.es_password)
 
         es_client = Elasticsearch(**es_args)
-        logging.info(es_client)
         es_info = es_client.info()
         logger.info(f"Connected to cluster named '{es_info['cluster_name']}' (version: {es_info['version']['number']})")
 
@@ -168,93 +183,85 @@ def get_es_client(cli_args):
         logger.error(e)
         exit(1)
 
-
 def deploy_model_to_elastic():
-    try:
-        from eland.ml.pytorch import PyTorchModel
-        from eland.ml.pytorch.transformers import (
-            SUPPORTED_TASK_TYPES,
-            TaskTypeError,
-            TransformerModel,
-        )
-    except ModuleNotFoundError as e:
-        logger.error(textwrap.dedent(f"""\
-             \033[31mFailed to run because module '{e.name}' is not available.\033[0m
-
-             This script requires PyTorch extras to run. You can install these by running:
-
-                 \033[1m{sys.executable} -m pip install 'eland[pytorch]'
-             \033[0m"""))
-        exit(1)
-
     # Parse arguments
     args = get_arg_parser().parse_args()
     print("done parsing")
 
+    print(args)
     # Connect to ES
     logger.info("Establishing connection to Elasticsearch")
     es = get_es_client(args)
 
     # Trace and save model, then upload it from temp file
     with tempfile.TemporaryDirectory() as tmp_dir:
-        logger.info(f"Loading HuggingFace transformer tokenizer and model '{args.hub_model_id}'")
+      logger.info(f"Loading HuggingFace transformer tokenizer and model '{args.hub_model_id}'")
 
-        try:
-            tm = TransformerModel(args.hub_model_id, args.task_type, args.quantize)
-            model_path, config, vocab_path = tm.save(tmp_dir)
-        except TaskTypeError as err:
-            logger.error(
-                f"Failed to get model for task type, please provide valid task type via '--task-type' parameter. Caused by {err}")
-            exit(1)
+      try:
+          tm = TransformerModel(args.hub_model_id, args.task_type, args.quantize)
+          model_path, config, vocab_path = tm.save(tmp_dir)
+      except TaskTypeError as err:
+          logger.error(
+              f"Failed to get model for task type, please provide valid task type via '--task-type' parameter. Caused by {err}")
+          exit(1)
 
-        ptm = PyTorchModel(es, args.es_model_id if args.es_model_id else tm.elasticsearch_model_id())
-        model_exists = es.options(ignore_status=404).ml.get_trained_models(model_id=ptm.model_id).meta.status == 200
+      ptm = PyTorchModel(es, args.es_model_id if args.es_model_id else tm.elasticsearch_model_id())
+      model_exists = check_es_model_exists(es, ptm) == 200
 
-        if model_exists:
-            if args.clear_previous:
-                logger.info(f"Stopping deployment for model with id '{ptm.model_id}'")
-                #          ptm.stop()
-                #          POST _ml/trained_models/<model_id>/deployment/_stop
-                url = "https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com:9243/_ml/trained_models/yashveer11__final_model_category/deployment/_stop?force=true"
-                auth = HTTPBasicAuth('apikey', 'ApiKey Y2FYbkxZZ0I2dGg1ZG05ZEw2S1A6SjMxR2dnWGZURHVlREpzT1FrZVp1QQ==')
-                response = req.request("POST", url, headers={
-                    'Host': '49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com:9243',
-                    'Content-Type': 'application/json',
-                    "Authorization": "ApiKey Y2FYbkxZZ0I2dGg1ZG05ZEw2S1A6SjMxR2dnWGZURHVlREpzT1FrZVp1QQ=="})
+      if model_exists:
+         if args.clear_previous:
+             logger.info(f"Stopping deployment for model with id '{ptm.model_id}'")
+             es_url_with_port = os.environ.get("ES_URL_WITH_PORT")
+             url = str(es_url_with_port) + "/_ml/trained_models/yashveer11__final_model_category/deployment/_stop?force=true"
+             api_key = "ApiKey " + str(os.environ.get("ES_API_KEY"))
+             auth = HTTPBasicAuth('apikey', api_key)
+             # auth = HTTPBasicAuth('apikey', 'ApiKey NzE1N0RJVUJXa2pPVFJ6bFFZeUg6dlJrUHNmLVJTX0tmdXMwczdqSHprUQ==')
+             es_host = os.environ.get("ES_HOST")
+             response = req.request("POST", str(os.environ.get("ES_URL_WITH_PORT")) + "/_ml/trained_models/yashveer11__final_model_category/deployment/_stop?force=true", headers={"Host": os.environ.get("ES_HOST"),
+                                                                       'Content-Type': 'application/json',
+                                                                       "Authorization": "ApiKey " + str(os.environ.get("ES_API_KEY"))})
 
-                logger.info(f"Deleting model with id '{ptm.model_id}'")
-                #           try:
-                #             ptm.delete()
-                #           except:
-                url = "https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com:9243/_ml/trained_models/yashveer11__final_model_category?force=true"
-                auth = HTTPBasicAuth('apikey', 'ApiKey Y2FYbkxZZ0I2dGg1ZG05ZEw2S1A6SjMxR2dnWGZURHVlREpzT1FrZVp1QQ==')
-                response = req.request("DELETE", url, headers={
-                    'Host': '49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com:9243',
-                    'Content-Type': 'application/json',
-                    "Authorization": "ApiKey Y2FYbkxZZ0I2dGg1ZG05ZEw2S1A6SjMxR2dnWGZURHVlREpzT1FrZVp1QQ=="})
-                logger.info("supposdly done?")
+             # response = req.request("POST", url, headers={'Host': '485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com:9243',
+             #                                                           'Content-Type': 'application/json',
+             #                                                           "Authorization": "ApiKey NzE1N0RJVUJXa2pPVFJ6bFFZeUg6dlJrUHNmLVJTX0tmdXMwczdqSHprUQ=="})
 
-            else:
-                logger.error(f"Trained model with id '{ptm.model_id}' already exists")
-                logger.info(
-                    "Run the script with the '--clear-previous' flag if you want to overwrite the existing model.")
-                exit(1)
+             logger.info(f"Deleting model with id '{ptm.model_id}'")
+    #           try:
+    #             ptm.delete()
+    #           except:
+    #          url = "https://485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com:9243/_ml/trained_models/yashveer11__final_model_category?force=true"
+             url = str(os.environ.get("ES_URL_WITH_PORT")) + "/_ml/trained_models/yashveer11__final_model_category?force=true"
+             auth = HTTPBasicAuth('apikey', 'ApiKey NzE1N0RJVUJXa2pPVFJ6bFFZeUg6dlJrUHNmLVJTX0tmdXMwczdqSHprUQ==')
+             response = req.request("POST", str(os.environ.get("ES_URL_WITH_PORT")) + "/_ml/trained_models/yashveer11__final_model_category/deployment/_stop?force=true", headers={"Host": os.environ.get("ES_HOST"),
+                                                                       'Content-Type': 'application/json',
+                                                                       "Authorization": "ApiKey " + str(os.environ.get("ES_API_KEY"))})
+             logger.info("supposdly done?")
 
-        logger.info(f"Creating model with id '{ptm.model_id}'")
-        ptm.put_config(config=config)
+         else:
+              logger.error(f"Trained model with id '{ptm.model_id}' already exists")
+              logger.info(
+                  "Run the script with the '--clear-previous' flag if you want to overwrite the existing model.")
+              exit(1)
 
-        logger.info(f"Uploading model definition")
-        ptm.put_model(model_path)
+      logger.info(f"Creating model with id '{ptm.model_id}'")
+      ptm.put_config(config=config)
 
-        logger.info(f"Uploading model vocabulary")
-        ptm.put_vocab(vocab_path)
+      logger.info(f"Uploading model definition")
+      ptm.put_model(model_path)
+
+      logger.info(f"Uploading model vocabulary")
+      ptm.put_vocab(vocab_path)
 
     # Start the deployed model
     if args.start:
-        logger.info(f"Starting model deployment")
-        ptm.start()
+      logger.info(f"Starting model deployment")
+      ptm.start()
 
     logger.info(f"Model successfully imported with id '{ptm.model_id}'")
+
+
+def check_es_model_exists(es, ptm):
+    return es.options(ignore_status=404).ml.get_trained_models(model_id=ptm.model_id).meta.status
 
 
 if __name__ == "__main__":
