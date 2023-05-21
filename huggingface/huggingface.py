@@ -108,7 +108,6 @@ def perform_training():
     secret_client = SecretClient(vault_url=vault_url, credential=credential)
     secret_name = "hfAccessToken"
     access_token = secret_client.get_secret(secret_name).value
-
     login(access_token)
 
     model = AutoModelForSequenceClassification.from_pretrained("yashveer11/final_model_category",
