@@ -103,12 +103,11 @@ def perform_training():
 
     # [id2label[idx] for idx, label in enumerate(example['labels']) if label == 1.0]
     encoded_dataset.set_format("torch")
-    # credential = DefaultAzureCredential()
-    # vault_url = "https://kv-05559-s-adf.vault.azure.net"
-    # secret_client = SecretClient(vault_url=vault_url, credential=credential)
-    # secret_name = "hfAccessToken"
-    # access_token = secret_client.get_secret(secret_name).value
-    access_token = os.environ.get("HF_ACCESS_TOKEN")
+    credential = DefaultAzureCredential()
+    vault_url = "https://kv-05559-s-adf.vault.azure.net"
+    secret_client = SecretClient(vault_url=vault_url, credential=credential)
+    secret_name = "hfAccessToken"
+    access_token = secret_client.get_secret(secret_name).value
 
     login(access_token)
 
