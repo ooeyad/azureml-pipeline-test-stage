@@ -1,9 +1,5 @@
 name: testing_pipeline
-on:
-  workflow_dispatch:
-  schedule:
-    - cron: "0 0/4 * * *"
-      
+on:     
   pull_request:
     branches:
       - main
