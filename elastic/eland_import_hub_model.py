@@ -40,6 +40,19 @@ def get_arg_parser():
             "Elastic-05559-s-001:ZWFzdHVzMi5henVyZS5lbGFzdGljLWNsb3VkLmNvbTo0NDMkNDlhODhlNTg5YTBhNGJhZDkzNTA0NTFlYmVhZTg3OTckMDdlYjU1NzhjODdlNGI3MWI5NmIwNjY0ZmY3NWI4ODc="),
         help="Cloud ID as found in the 'Manage Deployment' page of an Elastic Cloud deployment",
     )
+
+    parser.add_argument(
+        "--cloud-id",
+        default=os.environ.get(
+            "Elastic-05559-s-001:ZWFzdHVzMi5henVyZS5lbGFzdGljLWNsb3VkLmNvbTo0NDMkNDlhODhlNTg5YTBhNGJhZDkzNTA0NTFlYmVhZTg3OTckMDdlYjU1NzhjODdlNGI3MWI5NmIwNjY0ZmY3NWI4ODc="),
+        help="Cloud ID as found in the 'Manage Deployment' page of an Elastic Cloud deployment",
+    )
+
+    parser.add_argument(
+        "--url",
+        default=os.environ.get("https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com"),
+        help="An Elasticsearch connection URL, e.g. http://localhost:9200",
+    )
     parser.add_argument(
         "--hub-model-id",
         default="bart-large-mnli",
@@ -122,8 +135,8 @@ def get_es_client(cli_args):
         }
 
         # Deployment location
-        if cli_args.url:
-            es_args['hosts'] = cli_args.url
+        # if cli_args.url:
+        #     es_args['hosts'] = cli_args.url
 
         if cli_args.cloud_id:
             es_args['cloud_id'] = cli_args.cloud_id
@@ -139,6 +152,7 @@ def get_es_client(cli_args):
             es_args['basic_auth'] = (cli_args.es_username, cli_args.es_password)
 
         es_client = Elasticsearch(**es_args)
+        logging.info(es_client)
         es_info = es_client.info()
         logger.info(f"Connected to cluster named '{es_info['cluster_name']}' (version: {es_info['version']['number']})")
 
