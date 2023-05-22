@@ -156,7 +156,6 @@ def perform_training():
         push_to_hub=True,
         hub_model_id="yashveer11/testing_class"
     )
-
     # encoded_dataset['train'][0]['labels'].type()
     # encoded_dataset['train']['input_ids'][0]
 
