@@ -51,14 +51,14 @@ def get_arg_parser():
 
     location_args.add_argument(
         "--url",
-        default="https://485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com",
+        default="https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com",
         help="An Elasticsearch connection URL, e.g. http://localhost:9200",
     )
-    # location_args.add_argument(
-    #     "--cloud-id",
-    #     default=os.environ.get("Elastic-05559-d-002:ZWFzdHVzLmF6dXJlLmVsYXN0aWMtY2xvdWQuY29tOjQ0MyQ0ODVjZTM5MzFmMWU0YjYzOTNmM2EyNTZkOTZiYTc1ZSQ3Njc4ZmQyZjA2NWI0YWM1OTRhYjVlMmVjMTMxYjI3Mw=="),
-    #     help="Cloud ID as found in the 'Manage Deployment' page of an Elastic Cloud deployment",
-    # )
+    location_args.add_argument(
+        "--cloud-id",
+        default="Elastic-05559-s-001:ZWFzdHVzMi5henVyZS5lbGFzdGljLWNsb3VkLmNvbTo0NDMkNDlhODhlNTg5YTBhNGJhZDkzNTA0NTFlYmVhZTg3OTckMDdlYjU1NzhjODdlNGI3MWI5NmIwNjY0ZmY3NWI4ODc=",
+        help="Cloud ID as found in the 'Manage Deployment' page of an Elastic Cloud deployment",
+    )
     parser.add_argument(
         "--hub-model-id",
         default="bart-large-mnli",
@@ -68,7 +68,7 @@ def get_arg_parser():
     parser.add_argument(
         "--cloud-id",
         # default=os.environ.get("ES_CLOUD_ID"),
-        default=os.environ.get("Elastic-05559-d-002:ZWFzdHVzLmF6dXJlLmVsYXN0aWMtY2xvdWQuY29tOjQ0MyQ0ODVjZTM5MzFmMWU0YjYzOTNmM2EyNTZkOTZiYTc1ZSQ3Njc4ZmQyZjA2NWI0YWM1OTRhYjVlMmVjMTMxYjI3Mw=="),
+        default=os.environ.get("Elastic-05559-s-001:ZWFzdHVzMi5henVyZS5lbGFzdGljLWNsb3VkLmNvbTo0NDMkNDlhODhlNTg5YTBhNGJhZDkzNTA0NTFlYmVhZTg3OTckMDdlYjU1NzhjODdlNGI3MWI5NmIwNjY0ZmY3NWI4ODc="),
         help="Cloud ID as found in the 'Manage Deployment' page of an Elastic Cloud deployment",
     )
 
@@ -103,7 +103,7 @@ def get_arg_parser():
         "--es-api-key",
         required=False,
         # default=os.environ.get("ES_API_KEY"),
-        default="NzE1N0RJVUJXa2pPVFJ6bFFZeUg6dlJrUHNmLVJTX0tmdXMwczdqSHprUQ==",
+        default="--es-api-key ApiKey MEowRjhJY0I2dGg1ZG05ZHloNDU6Qmc5ZnJxVUxTRTZEcVBRNjFZa1d6QQ==",
         help="API key for Elasticsearch"
     )
     parser.add_argument(
