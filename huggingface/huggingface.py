@@ -100,8 +100,6 @@ def perform_training():
     id2label = {idx: label for idx, label in enumerate(labels)}
     label2id = {label: idx for idx, label in enumerate(labels)}
 
-    tokenizer = AutoTokenizer.from_pretrained("yashveer11/final_model_category")
-
     encoded_dataset = dataset.map(preprocess_data, batched=True, remove_columns=dataset['train'].column_names)
     example = encoded_dataset['train'][0]
 
@@ -176,4 +174,5 @@ def perform_training():
     trainer.train()
     trainer.push_to_hub("End of training")
 if __name__ == "__main__":
+    tokenizer = AutoTokenizer.from_pretrained("yashveer11/final_model_category")
     perform_training()
