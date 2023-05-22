@@ -16,6 +16,7 @@ from pathlib import Path
 from azure.identity import DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
 import argparse
+import logging
 labels = []
 def get_args():
     parser = argparse.ArgumentParser("huggingface")
@@ -108,6 +109,8 @@ def perform_training():
     secret_client = SecretClient(vault_url=vault_url, credential=credential)
     secret_name = "hfAccessToken"
     access_token = secret_client.get_secret(secret_name).value
+    logger = logging.getLogger(__name__)
+    logger.info("Access token from Github: " + access_token)
     login(access_token)
 
     model = AutoModelForSequenceClassification.from_pretrained("yashveer11/final_model_category",
