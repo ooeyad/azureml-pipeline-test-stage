@@ -51,7 +51,7 @@ def get_arg_parser():
 
     location_args.add_argument(
         "--url",
-        default=os.environ.get("https://485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com"),
+        default="https://485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com",
         help="An Elasticsearch connection URL, e.g. http://localhost:9200",
     )
     # location_args.add_argument(
@@ -67,8 +67,8 @@ def get_arg_parser():
     )
     parser.add_argument(
         "--cloud-id",
-        default=os.environ.get("ES_CLOUD_ID"),
-        # default=os.environ.get("Elastic-05559-d-002:ZWFzdHVzLmF6dXJlLmVsYXN0aWMtY2xvdWQuY29tOjQ0MyQ0ODVjZTM5MzFmMWU0YjYzOTNmM2EyNTZkOTZiYTc1ZSQ3Njc4ZmQyZjA2NWI0YWM1OTRhYjVlMmVjMTMxYjI3Mw=="),
+        # default=os.environ.get("ES_CLOUD_ID"),
+        default=os.environ.get("Elastic-05559-d-002:ZWFzdHVzLmF6dXJlLmVsYXN0aWMtY2xvdWQuY29tOjQ0MyQ0ODVjZTM5MzFmMWU0YjYzOTNmM2EyNTZkOTZiYTc1ZSQ3Njc4ZmQyZjA2NWI0YWM1OTRhYjVlMmVjMTMxYjI3Mw=="),
         help="Cloud ID as found in the 'Manage Deployment' page of an Elastic Cloud deployment",
     )
 
@@ -88,22 +88,22 @@ def get_arg_parser():
     parser.add_argument(
         "-u", "--es-username",
         required=False,
-        default=os.environ.get("ES_USER"),
-        # default=os.environ.get("iyad.alswaiti@external.stellantis.com"),
+        # default=os.environ.get("ES_USER"),
+        default="iyad.alswaiti@external.stellantis.com",
         help="Username for Elasticsearch"
     )
     parser.add_argument(
         "-p", "--es-password",
         required=False,
-        default=os.environ.get("ES_USER_PASS"),
-        # default=os.environ.get("Jordan123456789@"),
+        # default=os.environ.get("ES_USER_PASS"),
+        default="Jordan123456789@",
         help="Password for the Elasticsearch user specified with -u/--username"
     )
     parser.add_argument(
         "--es-api-key",
         required=False,
-        default=os.environ.get("ES_API_KEY"),
-        # default=os.environ.get("NzE1N0RJVUJXa2pPVFJ6bFFZeUg6dlJrUHNmLVJTX0tmdXMwczdqSHprUQ=="),
+        # default=os.environ.get("ES_API_KEY"),
+        default="NzE1N0RJVUJXa2pPVFJ6bFFZeUg6dlJrUHNmLVJTX0tmdXMwczdqSHprUQ==",
         help="API key for Elasticsearch"
     )
     parser.add_argument(
