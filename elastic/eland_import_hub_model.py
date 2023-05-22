@@ -65,12 +65,12 @@ def get_arg_parser():
         help="The model ID in the Hugging Face model hub, "
              "e.g. dbmdz/bert-large-cased-finetuned-conll03-english",
     )
-    # parser.add_argument(
-    #     "--cloud-id",
-    #     # default=os.environ.get("ES_CLOUD_ID"),
-    #     default=os.environ.get("Elastic-05559-s-001:ZWFzdHVzMi5henVyZS5lbGFzdGljLWNsb3VkLmNvbTo0NDMkNDlhODhlNTg5YTBhNGJhZDkzNTA0NTFlYmVhZTg3OTckMDdlYjU1NzhjODdlNGI3MWI5NmIwNjY0ZmY3NWI4ODc="),
-    #     help="Cloud ID as found in the 'Manage Deployment' page of an Elastic Cloud deployment",
-    # )
+    parser.add_argument(
+        "--cloud-id",
+        # default=os.environ.get("ES_CLOUD_ID"),
+        default=os.environ.get("Elastic-05559-s-001:ZWFzdHVzMi5henVyZS5lbGFzdGljLWNsb3VkLmNvbTo0NDMkNDlhODhlNTg5YTBhNGJhZDkzNTA0NTFlYmVhZTg3OTckMDdlYjU1NzhjODdlNGI3MWI5NmIwNjY0ZmY3NWI4ODc="),
+        help="Cloud ID as found in the 'Manage Deployment' page of an Elastic Cloud deployment",
+    )
 
     # parser.add_argument(
     #     "--url",
@@ -103,7 +103,7 @@ def get_arg_parser():
         "--es-api-key",
         required=False,
         # default=os.environ.get("ES_API_KEY"),
-        default="--es-api-key ApiKey MEowRjhJY0I2dGg1ZG05ZHloNDU6Qmc5ZnJxVUxTRTZEcVBRNjFZa1d6QQ==",
+        default="ApiKey MEowRjhJY0I2dGg1ZG05ZHloNDU6Qmc5ZnJxVUxTRTZEcVBRNjFZa1d6QQ==",
         help="API key for Elasticsearch"
     )
     parser.add_argument(
