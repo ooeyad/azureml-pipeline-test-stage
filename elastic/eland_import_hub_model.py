@@ -54,11 +54,11 @@ def get_arg_parser():
         default="https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com",
         help="An Elasticsearch connection URL, e.g. http://localhost:9200",
     )
-    location_args.add_argument(
-        "--cloud-id",
-        default="Elastic-05559-s-001:ZWFzdHVzMi5henVyZS5lbGFzdGljLWNsb3VkLmNvbTo0NDMkNDlhODhlNTg5YTBhNGJhZDkzNTA0NTFlYmVhZTg3OTckMDdlYjU1NzhjODdlNGI3MWI5NmIwNjY0ZmY3NWI4ODc=",
-        help="Cloud ID as found in the 'Manage Deployment' page of an Elastic Cloud deployment",
-    )
+    # location_args.add_argument(
+    #     "--cloud-id",
+    #     default="Elastic-05559-s-001:ZWFzdHVzMi5henVyZS5lbGFzdGljLWNsb3VkLmNvbTo0NDMkNDlhODhlNTg5YTBhNGJhZDkzNTA0NTFlYmVhZTg3OTckMDdlYjU1NzhjODdlNGI3MWI5NmIwNjY0ZmY3NWI4ODc=",
+    #     help="Cloud ID as found in the 'Manage Deployment' page of an Elastic Cloud deployment",
+    # )
     parser.add_argument(
         "--hub-model-id",
         default="bart-large-mnli",
