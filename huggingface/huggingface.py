@@ -157,8 +157,8 @@ def perform_training():
         hub_model_id="yashveer11/testing_class"
     )
 
-    encoded_dataset['train'][0]['labels'].type()
-    encoded_dataset['train']['input_ids'][0]
+    # encoded_dataset['train'][0]['labels'].type()
+    # encoded_dataset['train']['input_ids'][0]
 
     outputs = model(input_ids=encoded_dataset['train']['input_ids'][0].unsqueeze(0),
                     labels=encoded_dataset['train'][0]['labels'].unsqueeze(0))
