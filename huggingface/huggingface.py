@@ -18,6 +18,8 @@ from azure.keyvault.secrets import SecretClient
 from azure.identity import ClientSecretCredential
 import argparse
 import logging
+
+tokenizer = None
 labels = []
 def get_args():
     parser = argparse.ArgumentParser("huggingface")
@@ -29,7 +31,6 @@ def preprocess_data(examples):
     # take a batch of texts
     text = examples['CONCATENATED_TEXT']
     # encode them
-    tokenizer = AutoTokenizer.from_pretrained("yashveer11/final_model_category")
     encoding = tokenizer(text, padding="max_length", truncation=True, max_length=128)
     # add labels
     labels_batch = {k: examples[k] for k in examples.keys() if k in labels}
@@ -95,10 +96,10 @@ def perform_training():
     dataset = datasets.DatasetDict({"train": train, "test": test, "validation": validation})
 
     # dataset = prepare_training_datatests()
-    train_df = dataset['train']
-    labels = [label for label in train_df.features.keys() if label not in ['CONCATENATED_TEXT']]
+    labels = [label for label in dataset['train'].features.keys() if label not in ['CONCATENATED_TEXT']]
     id2label = {idx: label for idx, label in enumerate(labels)}
     label2id = {label: idx for idx, label in enumerate(labels)}
+
     tokenizer = AutoTokenizer.from_pretrained("yashveer11/final_model_category")
 
     encoded_dataset = dataset.map(preprocess_data, batched=True, remove_columns=dataset['train'].column_names)
@@ -156,8 +157,9 @@ def perform_training():
         push_to_hub=True,
         hub_model_id="yashveer11/testing_class"
     )
-    # encoded_dataset['train'][0]['labels'].type()
-    # encoded_dataset['train']['input_ids'][0]
+
+    encoded_dataset['train'][0]['labels'].type()
+    encoded_dataset['train']['input_ids'][0]
 
     outputs = model(input_ids=encoded_dataset['train']['input_ids'][0].unsqueeze(0),
                     labels=encoded_dataset['train'][0]['labels'].unsqueeze(0))
