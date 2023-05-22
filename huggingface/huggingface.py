@@ -15,6 +15,7 @@ import os
 from pathlib import Path
 from azure.identity import DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
+from azure.identity import ClientSecretCredential
 import argparse
 import logging
 labels = []
@@ -73,6 +74,9 @@ def compute_metrics(p: EvalPrediction):
 
 def perform_training():
     args = get_args()
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.INFO)
+
     filename = os.listdir(args.prepped_data)
     dataset1 = pd.read_csv((Path(args.prepped_data) / filename[0]))
 
@@ -104,12 +108,21 @@ def perform_training():
 
     # [id2label[idx] for idx, label in enumerate(example['labels']) if label == 1.0]
     encoded_dataset.set_format("torch")
-    credential = DefaultAzureCredential()
+
+    # Set the Azure Active Directory tenant ID, client ID, and client secret
+    tenant_id = "c1aee0b1-83f4-4518-a226-e7508aec4c2d"
+    client_id = "d0a93be1-2748-45be-8129-3c587cfdac01"
+    client_secret = "~XH8Q~FN0Wm1oR1PQyNDcaQyxs9JvAo1Xtr-hauM"
+
+    credential = ClientSecretCredential(tenant_id, client_id, client_secret)
+
     vault_url = "https://kv-05559-s-adf.vault.azure.net"
     secret_client = SecretClient(vault_url=vault_url, credential=credential)
     secret_name = "hfAccessToken"
+
+    logger.info("Trying to read Access token from azure key vault")
     access_token = secret_client.get_secret(secret_name).value
-    logger = logging.getLogger(__name__)
+
     logger.info("Access token from Github: " + access_token)
     login(access_token)
 
