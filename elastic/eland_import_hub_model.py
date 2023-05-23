@@ -212,12 +212,12 @@ def deploy_model_to_elastic():
          if args.clear_previous:
              logger.info(f"Stopping deployment for model with id '{ptm.model_id}'")
              es_url_with_port = os.environ.get("ES_URL_WITH_PORT")
-             url = "https://485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com:9243" + "/_ml/trained_models/yashveer11__final_model_category/deployment/_stop?force=true"
+             url = "https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com:9243" + "/_ml/trained_models/yashveer11__final_model_category/deployment/_stop?force=true"
              api_key = "ApiKey " + "MEowRjhJY0I2dGg1ZG05ZHloNDU6Qmc5ZnJxVUxTRTZEcVBRNjFZa1d6QQ=="
              auth = HTTPBasicAuth('apikey', api_key)
              # auth = HTTPBasicAuth('apikey', 'ApiKey NzE1N0RJVUJXa2pPVFJ6bFFZeUg6dlJrUHNmLVJTX0tmdXMwczdqSHprUQ==')
-             es_host = "485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com:9243"
-             response = req.request("POST", "https://485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com:9243" + "/_ml/trained_models/yashveer11__final_model_category/deployment/_stop?force=true", headers={"Host": os.environ.get("ES_HOST"),
+             es_host = "49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com:9243"
+             response = req.request("POST", "https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com:9243" + "/_ml/trained_models/yashveer11__final_model_category/deployment/_stop?force=true", headers={"Host": os.environ.get("ES_HOST"),
                                                                        'Content-Type': 'application/json',
                                                                        "Authorization": "ApiKey " + "MEowRjhJY0I2dGg1ZG05ZHloNDU6Qmc5ZnJxVUxTRTZEcVBRNjFZa1d6QQ=="})
 
@@ -230,9 +230,9 @@ def deploy_model_to_elastic():
     #             ptm.delete()
     #           except:
     #          url = "https://485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com:9243/_ml/trained_models/yashveer11__final_model_category?force=true"
-             url = "https://485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com:9243" + "/_ml/trained_models/yashveer11__final_model_category?force=true"
+             url = "https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com:9243" + "/_ml/trained_models/yashveer11__final_model_category?force=true"
              auth = HTTPBasicAuth('apikey', 'ApiKey MEowRjhJY0I2dGg1ZG05ZHloNDU6Qmc5ZnJxVUxTRTZEcVBRNjFZa1d6QQ==')
-             response = req.request("POST", "https://485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com:9243" + "/_ml/trained_models/yashveer11__final_model_category/deployment/_stop?force=true", headers={"Host": os.environ.get("ES_HOST"),
+             response = req.request("POST", "https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com:9243" + "/_ml/trained_models/yashveer11__final_model_category/deployment/_stop?force=true", headers={"Host": os.environ.get("ES_HOST"),
                                                                        'Content-Type': 'application/json',
                                                                        "Authorization": "ApiKey " + "MEowRjhJY0I2dGg1ZG05ZHloNDU6Qmc5ZnJxVUxTRTZEcVBRNjFZa1d6QQ=="})
              logger.info("supposdly done?")
