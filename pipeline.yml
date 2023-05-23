@@ -52,10 +52,9 @@ jobs:
     environment: azureml:ElandRequirments@latest
     compute: azureml:GPU002
     command: >-
-      python eland_import_hub_model.py
-      --status_input ${{inputs.status_input}}
-      --url https://49a88e589a0a4bad9350451ebeae8797.es.eastus2.azure.elastic-cloud.com:9243/                                                     
+      python eland_import_hub_model.py                                                           
       --hub-model-id yashveer11/final_model_category
+      --cloud-id Elastic-05559-s-001:ZWFzdHVzMi5henVyZS5lbGFzdGljLWNsb3VkLmNvbTo0NDMkNDlhODhlNTg5YTBhNGJhZDkzNTA0NTFlYmVhZTg3OTckMDdlYjU1NzhjODdlNGI3MWI5NmIwNjY0ZmY3NWI4ODc=
       --task-type text_classification
       --es-api-key Y2FYbkxZZ0I2dGg1ZG05ZEw2S1A6SjMxR2dnWGZURHVlREpzT1FrZVp1QQ==
       --clear-previous
