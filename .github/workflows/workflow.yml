@@ -27,5 +27,5 @@ jobs:
     - name: run job
       env:
         DATA_SRC: ${{secrets.DATA_SRC}}
-      run: bash -x run-job.sh pipeline.yml
+      run: bash -x run-job.sh pipeline2.yml
       working-directory: ./
