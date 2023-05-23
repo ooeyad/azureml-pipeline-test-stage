@@ -68,7 +68,7 @@ def get_arg_parser():
     parser.add_argument(
         "--cloud-id",
         # default=os.environ.get("ES_CLOUD_ID"),
-        default=os.environ.get("Elastic-05559-s-001:ZWFzdHVzMi5henVyZS5lbGFzdGljLWNsb3VkLmNvbTo0NDMkNDlhODhlNTg5YTBhNGJhZDkzNTA0NTFlYmVhZTg3OTckMDdlYjU1NzhjODdlNGI3MWI5NmIwNjY0ZmY3NWI4ODc="),
+        default="Elastic-05559-s-001:ZWFzdHVzMi5henVyZS5lbGFzdGljLWNsb3VkLmNvbTo0NDMkNDlhODhlNTg5YTBhNGJhZDkzNTA0NTFlYmVhZTg3OTckMDdlYjU1NzhjODdlNGI3MWI5NmIwNjY0ZmY3NWI4ODc=",
         help="Cloud ID as found in the 'Manage Deployment' page of an Elastic Cloud deployment",
     )
 
@@ -174,6 +174,7 @@ def get_es_client(cli_args):
             es_args['basic_auth'] = (cli_args.es_username, cli_args.es_password)
 
         es_client = Elasticsearch(**es_args)
+        logger.info(es_client)
         es_info = es_client.info()
         logger.info(f"Connected to cluster named '{es_info['cluster_name']}' (version: {es_info['version']['number']})")
 
@@ -230,8 +231,8 @@ def deploy_model_to_elastic():
     #           except:
     #          url = "https://485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com:9243/_ml/trained_models/yashveer11__final_model_category?force=true"
              url = "https://485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com:9243" + "/_ml/trained_models/yashveer11__final_model_category?force=true"
-             auth = HTTPBasicAuth('apikey', 'ApiKey NzE1N0RJVUJXa2pPVFJ6bFFZeUg6dlJrUHNmLVJTX0tmdXMwczdqSHprUQ==')
-             response = req.request("POST", "https://485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com:9243"+ "/_ml/trained_models/yashveer11__final_model_category/deployment/_stop?force=true", headers={"Host": os.environ.get("ES_HOST"),
+             auth = HTTPBasicAuth('apikey', 'ApiKey MEowRjhJY0I2dGg1ZG05ZHloNDU6Qmc5ZnJxVUxTRTZEcVBRNjFZa1d6QQ==')
+             response = req.request("POST", "https://485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com:9243" + "/_ml/trained_models/yashveer11__final_model_category/deployment/_stop?force=true", headers={"Host": os.environ.get("ES_HOST"),
                                                                        'Content-Type': 'application/json',
                                                                        "Authorization": "ApiKey " + "MEowRjhJY0I2dGg1ZG05ZHloNDU6Qmc5ZnJxVUxTRTZEcVBRNjFZa1d6QQ=="})
              logger.info("supposdly done?")
