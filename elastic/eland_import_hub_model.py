@@ -17,6 +17,23 @@ import textwrap
 from elastic_transport.client_utils import DEFAULT
 from elasticsearch import AuthenticationException, Elasticsearch
 
+try:
+    from eland.ml.pytorch import PyTorchModel
+    from eland.ml.pytorch.transformers import (
+        SUPPORTED_TASK_TYPES,
+        TaskTypeError,
+        TransformerModel,
+    )
+except ModuleNotFoundError as e:
+    # logger.error(textwrap.dedent(f"""\
+    #         \033[31mFailed to run because module '{e.name}' is not available.\033[0m
+    #
+    #         This script requires PyTorch extras to run. You can install these by running:
+    #
+    #             \033[1m{sys.executable} -m pip install 'eland[pytorch]'
+    #         \033[0m"""))
+    exit(1)
+
 MODEL_HUB_URL = "https://huggingface.co"
 
 import requests as req
@@ -118,7 +135,7 @@ def get_arg_parser():
     return parser
 
 
-def get_es_client(cli_args):
+def get_es_client(cli_args, logger):
     try:
         es_args = {
             'request_timeout': 300,
@@ -152,29 +169,12 @@ def get_es_client(cli_args):
         logger.error(e)
         exit(1)
 
-
-if __name__ == "__main__":
+def deploy_model_to_elastic():
     # Configure logging
     logging.basicConfig(format='%(asctime)s %(levelname)s : %(message)s')
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
 
-    try:
-        from eland.ml.pytorch import PyTorchModel
-        from eland.ml.pytorch.transformers import (
-            SUPPORTED_TASK_TYPES,
-            TaskTypeError,
-            TransformerModel,
-        )
-    except ModuleNotFoundError as e:
-        logger.error(textwrap.dedent(f"""\
-            \033[31mFailed to run because module '{e.name}' is not available.\033[0m
-
-            This script requires PyTorch extras to run. You can install these by running:
-
-                \033[1m{sys.executable} -m pip install 'eland[pytorch]'
-            \033[0m"""))
-        exit(1)
 
     # Parse arguments
     args = get_arg_parser().parse_args()
@@ -182,7 +182,7 @@ if __name__ == "__main__":
 
     # Connect to ES
     logger.info("Establishing connection to Elasticsearch")
-    es = get_es_client(args)
+    es = get_es_client(args, logger)
 
     # Trace and save model, then upload it from temp file
     with tempfile.TemporaryDirectory() as tmp_dir:
@@ -227,5 +227,9 @@ if __name__ == "__main__":
         ptm.start()
 
     logger.info(f"Model successfully imported with id '{ptm.model_id}'")
+
+if __name__ == "__main__":
+    deploy_model_to_elastic()
+
 
 # eland_import_hub_model \ --url https://485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com:9243/ \ --hub-model-id elastic/distilbert-base-cased-finetuned-conll03-english \--task-type ner \ --es-api-key dx98YIQBZHE919U170Wk:DC_TidJmTv6VqVvc0HLPHw \ --start
