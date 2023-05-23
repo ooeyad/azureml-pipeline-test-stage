@@ -159,6 +159,7 @@ def get_es_client(cli_args):
         # if cli_args.url:
         #     es_args['hosts'] = cli_args.url
 
+
         if cli_args.cloud_id:
             es_args['cloud_id'] = cli_args.cloud_id
 
