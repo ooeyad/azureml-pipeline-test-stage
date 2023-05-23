@@ -13,5 +13,6 @@ jobs:
       --hub-model-id yashveer11/final_model_category
       --task-type text_classification
       --es-api-key MEowRjhJY0I2dGg1ZG05ZHloNDU6Qmc5ZnJxVUxTRTZEcVBRNjFZa1d6QQ==
+      --cloud-id Elastic-05559-s-001:ZWFzdHVzMi5henVyZS5lbGFzdGljLWNsb3VkLmNvbTo0NDMkNDlhODhlNTg5YTBhNGJhZDkzNTA0NTFlYmVhZTg3OTckMDdlYjU1NzhjODdlNGI3MWI5NmIwNjY0ZmY3NWI4ODc=
       --clear-previous
       --start
