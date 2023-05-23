@@ -32,12 +32,12 @@ proxies = {
 def get_arg_parser():
     parser = argparse.ArgumentParser()
     location_args = parser.add_mutually_exclusive_group(required=True)
-    location_args.add_argument(
-        "--url",
-        # default=os.environ.get("https://485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com"),
-        default="https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com",
-        help="An Elasticsearch connection URL, e.g. http://localhost:9200",
-    )
+    # location_args.add_argument(
+    #     "--url",
+    #     # default=os.environ.get("https://485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com"),
+    #     default="https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com",
+    #     help="An Elasticsearch connection URL, e.g. http://localhost:9200",
+    # )
     location_args.add_argument(
         "--cloud-id",
         # default=os.environ.get("Elastic-05559-d-002:ZWFzdHVzLmF6dXJlLmVsYXN0aWMtY2xvdWQuY29tOjQ0MyQ0ODVjZTM5MzFmMWU0YjYzOTNmM2EyNTZkOTZiYTc1ZSQ3Njc4ZmQyZjA2NWI0YWM1OTRhYjVlMmVjMTMxYjI3Mw=="),
