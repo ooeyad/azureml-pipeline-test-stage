@@ -8,7 +8,7 @@ jobs:
     environment: azureml:ElandRequirments@latest
     compute: azureml:GPU002
     command: >-
-      python eland_import_hub_model.py                                                           
+      python eland_import_hub_model2.py                                                           
       --hub-model-id yashveer11/final_model_category
       --task-type text_classification
       --es-api-key MEowRjhJY0I2dGg1ZG05ZHloNDU6Qmc5ZnJxVUxTRTZEcVBRNjFZa1d6QQ==
