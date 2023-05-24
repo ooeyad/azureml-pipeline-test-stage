@@ -175,5 +175,6 @@ def perform_training():
 
     trainer.train()
     trainer.push_to_hub("End of training")
+
 if __name__ == "__main__":
     perform_training()

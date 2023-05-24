@@ -16,7 +16,7 @@ import textwrap
 
 from elastic_transport.client_utils import DEFAULT
 from elasticsearch import AuthenticationException, Elasticsearch
-
+import requests as req
 try:
     from eland.ml.pytorch import PyTorchModel
     from eland.ml.pytorch.transformers import (
@@ -25,36 +25,17 @@ try:
         TransformerModel,
     )
 except ModuleNotFoundError as e:
-    # logger.error(textwrap.dedent(f"""\
-    #         \033[31mFailed to run because module '{e.name}' is not available.\033[0m
-    #
-    #         This script requires PyTorch extras to run. You can install these by running:
-    #
-    #             \033[1m{sys.executable} -m pip install 'eland[pytorch]'
-    #         \033[0m"""))
     exit(1)
 
 MODEL_HUB_URL = "https://huggingface.co"
-
-import requests as req
 
 proxies = {
     'aiproxy.appl.chrysler.com:9080'
 }
 
-
-# URL = "https://jsonplaceholder.typicode.com/todos/1"
-# response = req.get(URL)
-
 def get_arg_parser():
     parser = argparse.ArgumentParser()
     location_args = parser.add_mutually_exclusive_group(required=True)
-    # location_args.add_argument(
-    #     "--url",
-    #     # default=os.environ.get("https://485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com"),
-    #     default="https://49a88e589a0a4bad9350451ebeae8797.eastus2.azure.elastic-cloud.com",
-    #     help="An Elasticsearch connection URL, e.g. http://localhost:9200",
-    # )
     location_args.add_argument(
         "--cloud-id",
         # default=os.environ.get("Elastic-05559-d-002:ZWFzdHVzLmF6dXJlLmVsYXN0aWMtY2xvdWQuY29tOjQ0MyQ0ODVjZTM5MzFmMWU0YjYzOTNmM2EyNTZkOTZiYTc1ZSQ3Njc4ZmQyZjA2NWI0YWM1OTRhYjVlMmVjMTMxYjI3Mw=="),
@@ -143,10 +124,6 @@ def get_es_client(cli_args, logger):
             'ca_certs': cli_args.ca_certs
         }
 
-        # Deployment location
-        # if cli_args.url:
-        #     es_args['hosts'] = cli_args.url
-
         if cli_args.cloud_id:
             es_args['cloud_id'] = cli_args.cloud_id
 
@@ -230,6 +207,3 @@ def deploy_model_to_elastic():
 
 if __name__ == "__main__":
     deploy_model_to_elastic()
-
-
-# eland_import_hub_model \ --url https://485ce3931f1e4b6393f3a256d96ba75e.eastus.azure.elastic-cloud.com:9243/ \ --hub-model-id elastic/distilbert-base-cased-finetuned-conll03-english \--task-type ner \ --es-api-key dx98YIQBZHE919U170Wk:DC_TidJmTv6VqVvc0HLPHw \ --start
