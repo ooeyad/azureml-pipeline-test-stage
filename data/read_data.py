@@ -11,5 +11,4 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser("read_data")
     parser.add_argument("--fetched_data", type=str, help="Path of fetched data")
     args = parser.parse_args()
-
     data_preparations(args.fetched_data)

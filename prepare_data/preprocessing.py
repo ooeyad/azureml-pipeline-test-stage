@@ -4,11 +4,6 @@ import argparse
 import os
 
 def preprocess_data(real_data_path, transformed_data_path):
-    # parser = argparse.ArgumentParser("preprocessing")
-    # parser.add_argument("--real_data", type=str, help="Path to fetched data")
-    # parser.add_argument("--transformed_data", type=str, help="Path of output data")
-    # args = parser.parse_args()
-
     ##### Read data
     filename = os.listdir(real_data_path)
     dataset = pd.read_csv((Path(real_data_path) / filename[0]))
@@ -21,7 +16,6 @@ def preprocess_data(real_data_path, transformed_data_path):
 
     #### Get the first 100 records
     dataset = dataset.head(100)
-    # dataset.to_csv(f"{Path(__file__).parent}/cairs_processed.csv", index = False)
 
     transformed_data = dataset.to_csv(
         (Path(transformed_data_path) / "transformed_data.csv"), index = False
