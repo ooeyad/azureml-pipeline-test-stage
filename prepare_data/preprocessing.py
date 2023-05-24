@@ -2,7 +2,6 @@ import pandas as pd
 from pathlib import Path
 import argparse
 import os
-
 def preprocess_data(real_data_path, transformed_data_path):
     ##### Read data
     filename = os.listdir(real_data_path)
