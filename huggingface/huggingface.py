@@ -13,11 +13,9 @@ from transformers import EvalPrediction
 import torch
 import os
 from pathlib import Path
-from azure.identity import DefaultAzureCredential
-from azure.keyvault.secrets import SecretClient
-from azure.identity import ClientSecretCredential
 import argparse
 import logging
+from utils.get_azure_kv_secret import get_azure_secret_value
 
 tokenizer = None
 labels = []
@@ -109,22 +107,8 @@ def perform_training():
 
     # [id2label[idx] for idx, label in enumerate(example['labels']) if label == 1.0]
     encoded_dataset.set_format("torch")
-
     # Set the Azure Active Directory tenant ID, client ID, and client secret
-    tenant_id = "c1aee0b1-83f4-4518-a226-e7508aec4c2d"
-    client_id = "d0a93be1-2748-45be-8129-3c587cfdac01"
-    client_secret = "~XH8Q~FN0Wm1oR1PQyNDcaQyxs9JvAo1Xtr-hauM"
-
-    credential = ClientSecretCredential(tenant_id, client_id, client_secret)
-
-    vault_url = "https://kv-05559-s-adf.vault.azure.net"
-    secret_client = SecretClient(vault_url=vault_url, credential=credential)
-    secret_name = "hfAccessToken"
-
-    logger.info("Trying to read Access token from azure key vault")
-    access_token = secret_client.get_secret(secret_name).value
-
-    logger.info("Access token from Github: " + access_token)
+    access_token = get_azure_secret_value("hfAccessToken")
     login(access_token)
 
     model = AutoModelForSequenceClassification.from_pretrained("yashveer11/final_model_category",
