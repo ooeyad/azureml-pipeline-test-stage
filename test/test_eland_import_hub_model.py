@@ -7,11 +7,15 @@ import sys
 sys.path.append("../")
 from elastic.eland_import_hub_model import get_arg_parser, get_es_client, deploy_model_to_elastic
 from elasticsearch import AuthenticationException, Elasticsearch
+from utils.get_azure_kv_secret import get_azure_secret_value
 
 class TestElandImportHubModel(unittest.TestCase):
+
     @patch('elastic.eland_import_hub_model.argparse.ArgumentParser', spec=ArgumentParser)
-    def test_get_arg_parser(self, mock_argparser):
+    @patch('elastic.eland_import_hub_model.get_azure_secret_value', return_value='123')
+    def test_get_arg_parser(self, mock_secret_value, mock_argparser):
         # Call the function
+        mock_secret_value.return_value = '123'
         result = get_arg_parser()
 
         # Assertions
@@ -19,7 +23,8 @@ class TestElandImportHubModel(unittest.TestCase):
         mock_argparser.assert_called_with()
 
     @patch('elastic.eland_import_hub_model.Elasticsearch', spec=Elasticsearch)
-    def test_get_es_client(self, mock_elasticsearch):
+    @patch('utils.get_azure_kv_secret.get_azure_secret_value', return_value='123')
+    def test_get_es_client(self,mock_kv_secret, mock_elasticsearch):
         # Create mock cli_args
         logging.basicConfig(format='%(asctime)s %(levelname)s : %(message)s')
         logger = logging.getLogger(__name__)
