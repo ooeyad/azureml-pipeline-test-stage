@@ -16,6 +16,9 @@ import textwrap
 
 from elastic_transport.client_utils import DEFAULT
 from elasticsearch import AuthenticationException, Elasticsearch
+import sys
+sys.path.append("../")
+from utils.get_azure_kv_secret import get_azure_secret_value
 import requests as req
 try:
     from eland.ml.pytorch import PyTorchModel
@@ -34,12 +37,15 @@ proxies = {
 }
 
 def get_arg_parser():
+    es_cloud_id = get_azure_secret_value("es-cloud-id")
+    es_username = get_azure_secret_value("es-username")
+    es_password = get_azure_secret_value("es-password")
+    es_api_key = get_azure_secret_value("es-api-key")
     parser = argparse.ArgumentParser()
     location_args = parser.add_mutually_exclusive_group(required=True)
     location_args.add_argument(
         "--cloud-id",
-        # default=os.environ.get("Elastic-05559-d-002:ZWFzdHVzLmF6dXJlLmVsYXN0aWMtY2xvdWQuY29tOjQ0MyQ0ODVjZTM5MzFmMWU0YjYzOTNmM2EyNTZkOTZiYTc1ZSQ3Njc4ZmQyZjA2NWI0YWM1OTRhYjVlMmVjMTMxYjI3Mw=="),
-        default="Elastic-05559-s-001:ZWFzdHVzMi5henVyZS5lbGFzdGljLWNsb3VkLmNvbTo0NDMkNDlhODhlNTg5YTBhNGJhZDkzNTA0NTFlYmVhZTg3OTckMDdlYjU1NzhjODdlNGI3MWI5NmIwNjY0ZmY3NWI4ODc=",
+        default="Elastic-05559-s-001:" + es_cloud_id,
         help="Cloud ID as found in the 'Manage Deployment' page of an Elastic Cloud deployment",
     )
     parser.add_argument(
@@ -59,19 +65,19 @@ def get_arg_parser():
     parser.add_argument(
         "-u", "--es-username",
         required=False,
-        default="iyad.alswaiti@external.stellantis.com",
+        default=es_username,
         help="Username for Elasticsearch"
     )
     parser.add_argument(
         "-p", "--es-password",
         required=False,
-        default="Jordan123456789@",
+        default=es_password,
         help="Password for the Elasticsearch user specified with -u/--username"
     )
     parser.add_argument(
         "--es-api-key",
         required=False,
-        default="--es-api-key ApiKey MEowRjhJY0I2dGg1ZG05ZHloNDU6Qmc5ZnJxVUxTRTZEcVBRNjFZa1d6QQ==",
+        default="--es-api-key ApiKey " + es_api_key,
         help="API key for Elasticsearch"
     )
     parser.add_argument(

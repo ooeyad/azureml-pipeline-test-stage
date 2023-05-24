@@ -15,6 +15,8 @@ import os
 from pathlib import Path
 import argparse
 import logging
+import sys
+sys.path.append("../")
 from utils.get_azure_kv_secret import get_azure_secret_value
 
 tokenizer = None
