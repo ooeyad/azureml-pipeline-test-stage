@@ -15,7 +15,7 @@ import os
 from pathlib import Path
 import argparse
 import logging
-from utils.get_huggingface_access_token import get_hf_access_token
+from utils.get_azure_kv_secret import get_azure_secret_value
 
 tokenizer = None
 labels = []
@@ -108,7 +108,7 @@ def perform_training():
     # [id2label[idx] for idx, label in enumerate(example['labels']) if label == 1.0]
     encoded_dataset.set_format("torch")
     # Set the Azure Active Directory tenant ID, client ID, and client secret
-    access_token = get_hf_access_token()
+    access_token = get_azure_secret_value("hfAccessToken")
     login(access_token)
 
     model = AutoModelForSequenceClassification.from_pretrained("yashveer11/final_model_category",
