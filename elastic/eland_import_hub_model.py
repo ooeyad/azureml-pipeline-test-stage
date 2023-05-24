@@ -174,7 +174,7 @@ def deploy_model_to_elastic():
             exit(1)
 
         ptm = PyTorchModel(es, args.es_model_id if args.es_model_id else tm.elasticsearch_model_id())
-        model_exists = es.options(ignore_status=404).ml.get_trained_models(model_id=ptm.model_id).meta.status == 200
+        model_exists = check_es_model_exists(es, ptm) == 200
 
         if model_exists:
             if args.clear_previous:
@@ -204,6 +204,9 @@ def deploy_model_to_elastic():
         ptm.start()
 
     logger.info(f"Model successfully imported with id '{ptm.model_id}'")
+
+def check_es_model_exists(es, ptm):
+    return es.options(ignore_status=404).ml.get_trained_models(model_id=ptm.model_id).meta.status
 
 if __name__ == "__main__":
     deploy_model_to_elastic()

@@ -20,10 +20,16 @@ def preprocess_data(real_data_path, transformed_data_path):
         (Path(transformed_data_path) / "transformed_data.csv"), index = False
     )
 
-if __name__ == "__main__":
+
+def get_args():
     parser = argparse.ArgumentParser("preprocessing")
     parser.add_argument("--real_data", type=str, help="Path to fetched data")
     parser.add_argument("--transformed_data", type=str, help="Path of output data")
     args = parser.parse_args()
+    return args
+
+
+if __name__ == "__main__":
+    args = get_args()
 
     preprocess_data(args.real_data, args.transformed_data)
