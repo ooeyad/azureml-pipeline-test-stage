@@ -62,7 +62,7 @@ class TestYourScript(unittest.TestCase):
                  patch('huggingface.huggingface.datasets.DatasetDict.set_format', return_value=dataset_dict), \
                     patch('huggingface.huggingface.AutoModelForSequenceClassification.from_pretrained', return_value=MockModel(modelId='model1')), \
                     patch.object(huggingface.huggingface.huggingface_hub.HfApi, 'list_models', return_value=[MockModel(modelId='model1'), MockModel(modelId='model2')]), \
-                    patch('utils.get_azure_kv_secret.SecretClient.get_secret', return_value=MockSecretClass()), \
+                    patch('huggingface.huggingface.SecretClient.get_secret', return_value=MockSecretClass()), \
                     patch('huggingface.huggingface.login', return_value=None):
 
                 perform_training()
