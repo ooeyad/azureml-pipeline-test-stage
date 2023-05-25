@@ -5,17 +5,16 @@ from unittest.mock import patch, MagicMock, Mock
 from argparse import ArgumentParser, Namespace
 import sys
 sys.path.append("../")
-from elastic.eland_import_hub_model import get_arg_parser, get_es_client, deploy_model_to_elastic
+from elastic.eland_import_hub_model import get_arg_parser, get_es_client, deploy_model_to_elastic, get_azure_secret_value, ClientSecretCredential
 from elasticsearch import AuthenticationException, Elasticsearch
-from utils.get_azure_kv_secret import get_azure_secret_value
+
 
 class TestElandImportHubModel(unittest.TestCase):
 
     @patch('elastic.eland_import_hub_model.argparse.ArgumentParser', spec=ArgumentParser)
     @patch('elastic.eland_import_hub_model.get_azure_secret_value', return_value='123')
-    def test_get_arg_parser(self, mock_secret_value, mock_argparser):
+    def test_get_arg_parser(self, mock_azure_secret,mock_argparser):
         # Call the function
-        mock_secret_value.return_value = '123'
         result = get_arg_parser()
 
         # Assertions
@@ -23,8 +22,8 @@ class TestElandImportHubModel(unittest.TestCase):
         mock_argparser.assert_called_with()
 
     @patch('elastic.eland_import_hub_model.Elasticsearch', spec=Elasticsearch)
-    @patch('utils.get_azure_kv_secret.get_azure_secret_value', return_value='123')
-    def test_get_es_client(self,mock_kv_secret, mock_elasticsearch):
+    # @patch('elastic.eland_import_hub_model.get_azure_secret_value', return_value='123')
+    def test_get_es_client(self, mock_elasticsearch):
         # Create mock cli_args
         logging.basicConfig(format='%(asctime)s %(levelname)s : %(message)s')
         logger = logging.getLogger(__name__)
@@ -148,6 +147,32 @@ class TestElandImportHubModel(unittest.TestCase):
         # Assert that the necessary objects and functions were called with the expected arguments
         # mock_logger.info.assert_called_with("Model successfully imported with id 'model-id'")
         mock_tm.save.assert_called_with(mock_temp_dir)
+
+    @patch('elastic.eland_import_hub_model.configparser.ConfigParser')
+    @patch('elastic.eland_import_hub_model.get_kv_secret')
+    @patch('elastic.eland_import_hub_model.ClientSecretCredential', spec=ClientSecretCredential)
+
+    def test_get_azure_secret_value(self, mock_clientSecretCred, mock_get_kv_secret, mock_config_parser):
+        # Mock the return values
+        mock_tenant_id = 'mock_tenant_id'
+        mock_client_id = 'mock_client_id'
+        mock_client_secret = 'mock_client_secret'
+        mock_access_token = 'mock_access_token'
+        mock_client = MagicMock(spec=ClientSecretCredential)
+        mock_clientSecretCred.return_value = mock_client
+        mock_config = mock_config_parser.return_value
+        mock_config.get.return_value = mock_tenant_id, mock_client_id, mock_client_secret
+
+        mock_get_kv_secret.return_value = mock_access_token
+
+        # Call the function with a sample secret name
+        result = get_azure_secret_value('sample_secret')
+
+        # Assert the expected behavior
+        self.assertEqual(result, mock_access_token)
+        mock_config_parser.assert_called_once_with()
+        mock_config.read.assert_called_once_with('../azure.properties')
+        self.assertEqual(mock_config.get.call_count, 3)
 
 
 if __name__ == '__main__':

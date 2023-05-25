@@ -16,9 +16,9 @@ import textwrap
 
 from elastic_transport.client_utils import DEFAULT
 from elasticsearch import AuthenticationException, Elasticsearch
-import sys
-sys.path.append("../")
-from utils.get_azure_kv_secret import get_azure_secret_value
+from azure.keyvault.secrets import SecretClient
+from azure.identity import ClientSecretCredential
+import configparser
 import requests as req
 try:
     from eland.ml.pytorch import PyTorchModel
@@ -211,6 +211,24 @@ def deploy_model_to_elastic():
 
     logger.info(f"Model successfully imported with id '{ptm.model_id}'")
 
+def get_kv_secret(credential, secret_name):
+    vault_url = "https://kv-05559-s-adf.vault.azure.net"
+    secret_client = SecretClient(vault_url=vault_url, credential=credential)
+    access_token = secret_client.get_secret(secret_name).value
+    return access_token
+
+def get_azure_secret_value(secret_name):
+    config = configparser.ConfigParser()
+    config.read('../azure.properties')
+
+    # Access the connection values
+    tenant_id = config.get('ServicePrincipal', 'tenant_id')
+    client_id = config.get('ServicePrincipal', 'client_id')
+    client_secret = config.get('ServicePrincipal', 'client_secret')
+    credential = ClientSecretCredential(tenant_id, client_id, client_secret)
+    # HuggingFace access token
+    access_token = get_kv_secret(credential, secret_name)
+    return access_token
 def check_es_model_exists(es, ptm):
     return es.options(ignore_status=404).ml.get_trained_models(model_id=ptm.model_id).meta.status
 
