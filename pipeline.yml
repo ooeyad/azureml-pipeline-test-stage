@@ -43,7 +43,7 @@ jobs:
       python huggingface.py 
       --prepped_data ${{inputs.prepped_data}}
       --status_output ${{outputs.status_output}}
-      --azure_credentials ${{ secrets.AZURE_CREDENTIALS }}
+      --azure_credentials ${{AZURE_CREDENTIALS}}
     
   elastic:
     type: command
