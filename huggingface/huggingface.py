@@ -19,6 +19,7 @@ import sys
 from azure.keyvault.secrets import SecretClient
 from azure.identity import ClientSecretCredential
 import configparser
+import json
 
 tokenizer = None
 labels = []
@@ -26,6 +27,7 @@ def get_args():
     parser = argparse.ArgumentParser("huggingface")
     parser.add_argument("--prepped_data", type=str, help="Path to raw data")
     parser.add_argument("--status_output", type=str, help="Path of prepped data")
+    parser.add_argument("--zure_credentials", type=str, help="azure credentials")
     args = parser.parse_args()
     return args
 def preprocess_data(examples, labels, tokenizer):
@@ -111,7 +113,7 @@ def perform_training():
     # [id2label[idx] for idx, label in enumerate(example['labels']) if label == 1.0]
     encoded_dataset.set_format("torch")
     # Set the Azure Active Directory tenant ID, client ID, and client secret
-    access_token = get_azure_secret_value("hfAccessToken")
+    access_token = get_azure_secret_value("hfAccessToken",args.azure_credentials)
     login(access_token)
 
     model = AutoModelForSequenceClassification.from_pretrained("yashveer11/final_model_category",
@@ -168,14 +170,15 @@ def get_kv_secret(credential, secret_name):
     access_token = secret_client.get_secret(secret_name).value
     return access_token
 
-def get_azure_secret_value(secret_name):
+def get_azure_secret_value(secret_name, azure_credentials):
     config = configparser.ConfigParser()
     config.read('../azure.properties')
 
+    credentials = json.loads(azure_credentials)
     # Access the connection values
-    tenant_id = config.get('ServicePrincipal', 'tenant_id')
-    client_id = config.get('ServicePrincipal', 'client_id')
-    client_secret = config.get('ServicePrincipal', 'client_secret')
+    tenant_id = credentials['tenant_id']
+    client_id = credentials['client_id']
+    client_secret = credentials['client_secret']
     credential = ClientSecretCredential(tenant_id, client_id, client_secret)
     # HuggingFace access token
     access_token = get_kv_secret(credential, secret_name)
