@@ -24,15 +24,16 @@ class MockModel:
 
 
 class MockArgs:
-    def __init__(self, prepped_data, status_output):
+    def __init__(self, prepped_data, status_output,azure_credentials):
         self.prepped_data = prepped_data
         self.status_output = status_output
+        self.azure_credentials = azure_credentials
 
 class TestYourScript(unittest.TestCase):
     @patch('sys.stdout', new_callable=StringIO)
     def test_perform_training(self, mock_stdout):
         # Mock the required dependencies or provide sample inputs
-        args = MockArgs(prepped_data='prepped_data', status_output='status_output')
+        args = MockArgs(prepped_data='prepped_data', status_output='status_output',azure_credentials='{"tenant_id":"123", "client_id":"123", "client_secret":"123"}')
         filename = 'dataset.csv'
         dataset1 = pd.DataFrame({'CONCATENATED_TEXT': ['example text']})
 
