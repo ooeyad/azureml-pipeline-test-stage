@@ -82,7 +82,7 @@ def perform_training():
     logger.setLevel(logging.INFO)
 
     azure_creds = os.environ.get('AZURE_CREDENTIALS')
-    logger.info("value of azure credentials iyad: " + azure_creds)
+    logger.info("value of azure credentials iyad: " + str(azure_creds))
 
     filename = os.listdir(args.prepped_data)
     dataset1 = pd.read_csv((Path(args.prepped_data) / filename[0]))
