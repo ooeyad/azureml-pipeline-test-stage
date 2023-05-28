@@ -38,8 +38,6 @@ jobs:
       status_output:
         mode: upload
     environment: azureml:ModelTraining@latest
-    env:
-      AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
     compute: azureml:GPU002
     command: >- 
       python huggingface.py 
