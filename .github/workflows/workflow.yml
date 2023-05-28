@@ -25,5 +25,5 @@ jobs:
       env:
         DATA_SRC: ${{secrets.DATA_SRC}}
         AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-      run: bash -x run-job.sh pipeline2.yml
+      run: bash -x run-job.sh pipeline.yml --secret $AZURE_CREDENTIALS
       working-directory: ./
