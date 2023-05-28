@@ -5,8 +5,6 @@ jobs:
   huggingface:
     type: command
     code: huggingface
-    inputs:
-      prepped_data: "data"
     outputs:
       status_output:
         mode: upload
