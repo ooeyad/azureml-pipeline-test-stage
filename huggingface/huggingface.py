@@ -81,6 +81,9 @@ def perform_training():
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
 
+    azure_creds = os.environ.get('AZURE_CREDENTIALS')
+    logger.info("value of azure credentials iyad: " + azure_creds)
+
     filename = os.listdir(args.prepped_data)
     dataset1 = pd.read_csv((Path(args.prepped_data) / filename[0]))
 
@@ -115,9 +118,6 @@ def perform_training():
     # azure_creds = args.azure_credentials
     # Set the Azure Active Directory tenan
     # t ID, client ID, and client secret
-    azure_creds = os.environ.get('AZURE_CREDENTIALS')
-
-    logger.info("value of azure credentials iyad: " + azure_creds)
     access_token = get_azure_secret_value("hfAccessToken",azure_creds)
     login(access_token)
 
