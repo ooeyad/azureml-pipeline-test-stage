@@ -14,15 +14,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    outputs:
-      secret_output: ${{ steps.set_secret.outputs.secret_value }}
-
     steps:
-      - name: Set Secret
-        id: set_secret
-        run: |
-          echo "::set-output name=secret_value::${{ secrets.AZURE_CREDENTIALS }}"
-
       - name: check out repo
         uses: actions/checkout@v2
 
@@ -36,13 +28,8 @@ jobs:
         working-directory: ./
         continue-on-error: true
 
-      - name: run job
-        id: run_pipeline
-        run: bash -c "echo '::set-output name=secret_output::${{ steps.set_secret.outputs.secret_value }}'"
-        working-directory: ./
-
       - name: Run Pipeline
         env:
           DATA_SRC: ${{ secrets.DATA_SRC }}
-        run: bash -x run-job.sh pipeline.yml --secret ${{ steps.set_secret.outputs.secret_value }}
+        run: bash -x run-job.sh pipeline.yml
         working-directory: ./
