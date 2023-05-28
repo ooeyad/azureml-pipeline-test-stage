@@ -20,7 +20,6 @@ from elasticsearch import AuthenticationException, Elasticsearch
 from azure.keyvault.secrets import SecretClient
 from azure.identity import ClientSecretCredential
 import configparser
-
 import requests as req
 try:
     from eland.ml.pytorch import PyTorchModel
