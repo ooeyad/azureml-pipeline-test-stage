@@ -39,10 +39,12 @@ proxies = {
 }
 
 def get_arg_parser():
-    es_cloud_id = get_azure_secret_value("es-cloud-id")
-    es_username = get_azure_secret_value("es-username")
-    es_password = get_azure_secret_value("es-password")
-    es_api_key = get_azure_secret_value("es-api-key")
+    azure_creds = os.environ.get("AZURE_CREDENTIALS")
+    es_cloud_id = get_azure_secret_value("es-cloud-id",azure_creds)
+    es_username = get_azure_secret_value("es-username",azure_creds)
+    es_password = get_azure_secret_value("es-password",azure_creds)
+    es_api_key = get_azure_secret_value("es-api-key",azure_creds)
+
     parser = argparse.ArgumentParser()
     location_args = parser.add_mutually_exclusive_group(required=True)
     location_args.add_argument(
@@ -132,18 +134,17 @@ def get_es_client(cli_args, logger):
             'ca_certs': cli_args.ca_certs
         }
 
+        azure_creds = os.environ.get("AZURE_CREDENTIALS")
+
         if cli_args.cloud_id:
             es_args['cloud_id'] = cli_args.cloud_id
 
-        # Authentication
-        if cli_args.es_api_key:
-            es_args['api_key'] = cli_args.es_api_key
-        elif cli_args.es_username:
-            if not cli_args.es_password:
-                logging.error(f"Password for user {cli_args.es_username} was not specified.")
-                exit(1)
+        es_api_key = get_azure_secret_value("es-api-key",azure_creds)
+        es_username = get_azure_secret_value("es-username", azure_creds)
+        es_password = get_azure_secret_value("es-password", azure_creds)
 
-            es_args['basic_auth'] = (cli_args.es_username, cli_args.es_password)
+        es_args['api_key'] = es_api_key
+        es_args['basic_auth'] = (es_username, es_password)
 
         es_client = Elasticsearch(**es_args)
         es_info = es_client.info()
@@ -219,14 +220,12 @@ def get_kv_secret(credential, secret_name):
     access_token = secret_client.get_secret(secret_name).value
     return access_token
 
-def get_azure_secret_value(secret_name):
-    config = configparser.ConfigParser()
-    config.read('../azure.properties')
-
+def get_azure_secret_value(secret_name, azure_credentials):
+    credentials = json.loads(azure_credentials)
     # Access the connection values
-    tenant_id = config.get('ServicePrincipal', 'tenant_id')
-    client_id = config.get('ServicePrincipal', 'client_id')
-    client_secret = config.get('ServicePrincipal', 'client_secret')
+    tenant_id = credentials['tenantId']
+    client_id = credentials['clientId']
+    client_secret = credentials['clientSecret']
     credential = ClientSecretCredential(tenant_id, client_id, client_secret)
     # HuggingFace access token
     access_token = get_kv_secret(credential, secret_name)
