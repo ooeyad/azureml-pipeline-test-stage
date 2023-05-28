@@ -82,7 +82,7 @@ def perform_training():
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
 
-    azure_creds = args.azure_credentials
+    azure_creds = os.environ.get("AZURE_CREDENTIALS")
 
 
     filename = os.listdir(args.prepped_data)
