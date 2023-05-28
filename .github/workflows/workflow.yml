@@ -34,7 +34,12 @@ jobs:
         continue-on-error: true
 
       - name: run job
+        id: run_pipeline
+        run: bash -c "echo '::set-output name=secret_output::${{ steps.set_secret.outputs.secret_value }}'"
+        working-directory: ./
+
+      - name: Run Pipeline
         env:
           DATA_SRC: ${{ secrets.DATA_SRC }}
-        run: bash -x run-job.sh pipeline.yml --secret ${{ needs.run_pipeline.outputs.secret_output }}
+        run: bash -x run-job.sh pipeline.yml --secret ${{ needs.build.outputs.secret_output }}
         working-directory: ./
