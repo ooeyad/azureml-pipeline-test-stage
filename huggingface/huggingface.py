@@ -179,11 +179,8 @@ def get_kv_secret(credential, secret_name):
     return access_token
 
 def get_azure_secret_value(secret_name, azure_credentials):
-    config = configparser.ConfigParser()
-    config.read('../azure.properties')
 
     credentials = json.loads(azure_credentials)
-
     # Access the connection values
     tenant_id = credentials['tenantId']
     client_id = credentials['clientId']
