@@ -11,8 +11,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    outputs:
-      secret_output: ${{ steps.set_secret.outputs.secret_value }}
+    env:
+      SECRET_OUTPUT: ${{ steps.set_secret.outputs.secret_value }}
+      DATA_SRC: ${{ secrets.DATA_SRC }}
 
     steps:
       - name: Set Secret
@@ -39,7 +40,5 @@ jobs:
         working-directory: ./
 
       - name: Run Pipeline
-        env:
-          DATA_SRC: ${{ secrets.DATA_SRC }}
-        run: bash -x run-job.sh pipeline.yml --secret ${{ needs.build.outputs.secret_output }}
+        run: bash -x run-job.sh pipeline.yml --secret $SECRET_OUTPUT
         working-directory: ./
