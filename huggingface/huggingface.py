@@ -119,6 +119,7 @@ def perform_training():
     # azure_creds = args.azure_credentials
     # Set the Azure Active Directory tenan
     # t ID, client ID, and client secret
+    logger.info("azure creds: " + azure_creds)
     access_token = get_azure_secret_value("hfAccessToken",azure_creds)
     login(access_token)
 
@@ -181,6 +182,7 @@ def get_azure_secret_value(secret_name, azure_credentials):
     config.read('../azure.properties')
 
     credentials = json.loads(azure_credentials)
+
     # Access the connection values
     tenant_id = credentials['tenant_id']
     client_id = credentials['client_id']
