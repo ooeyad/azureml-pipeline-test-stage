@@ -79,7 +79,8 @@ def compute_metrics(p: EvalPrediction):
 
 def perform_training():
     args = get_args()
-    logger = logging.getLogger()
+    logging.basicConfig(format='%(asctime)s %(levelname)s : %(message)s')
+    logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
 
     azure_creds = os.environ.get("AZURE_CREDENTIALS")
