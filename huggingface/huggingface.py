@@ -116,6 +116,8 @@ def perform_training():
     # Set the Azure Active Directory tenan
     # t ID, client ID, and client secret
     azure_creds = os.environ.get('AZURE_CREDENTIALS')
+
+    logger.info("value of azure credentials iyad: " + azure_creds)
     access_token = get_azure_secret_value("hfAccessToken",azure_creds)
     login(access_token)
 
