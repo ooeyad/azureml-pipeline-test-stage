@@ -34,6 +34,7 @@ jobs:
     code: huggingface
     inputs:
       prepped_data: ${{parent.jobs.preprocess_data.outputs.transformed_data}}
+      azure_credentials: ${{ inputs.azure_credentials }}
     outputs:
       status_output:
         mode: upload
@@ -42,8 +43,7 @@ jobs:
     command: >- 
       python huggingface.py 
       --prepped_data ${{inputs.prepped_data}}
-      --status_output ${{outputs.status_output}}
-      --azure_credentials ${{ secrets.AZURE_CREDENTIALS }}
+      --status_output ${{outputs.status_output}}      
     
   elastic:
     type: command
