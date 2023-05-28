@@ -185,9 +185,9 @@ def get_azure_secret_value(secret_name, azure_credentials):
     credentials = json.loads(azure_credentials)
 
     # Access the connection values
-    tenant_id = credentials['tenant_id']
-    client_id = credentials['client_id']
-    client_secret = credentials['client_secret']
+    tenant_id = credentials['tenantId']
+    client_id = credentials['clientId']
+    client_secret = credentials['clientSecret']
     credential = ClientSecretCredential(tenant_id, client_id, client_secret)
     # HuggingFace access token
     access_token = get_kv_secret(credential, secret_name)
