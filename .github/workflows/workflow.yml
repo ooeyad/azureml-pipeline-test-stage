@@ -13,22 +13,22 @@ jobs:
     outputs:
       secret_output: ${{ steps.set_secret.outputs.secret_value }}
     steps:
-    - name: Set Secret
-      id: set_secret
-      run: |
-        echo "::set-output name=secret_value::${{ secrets.AZURE_CREDENTIALS }}"        
-        - name: check out repo
-      uses: actions/checkout@v2
-    - name: azure login
-      uses: azure/login@v1
-      with:
-        creds: ${{secrets.AZURE_CREDENTIALS}}
-    - name: setup
-      run: bash setup.sh
-      working-directory: ./
-      continue-on-error: true
-    - name: run job
-      env:
-        DATA_SRC: ${{secrets.DATA_SRC}}
-      run: bash -x run-job.sh pipeline.yml --secret ${{ needs.run_pipeline.outputs.secret_output }}
-      working-directory: ./
+      - name: Set Secret
+        id: set_secret
+        run: |
+          echo "::set-output name=secret_value::${{ secrets.AZURE_CREDENTIALS }}"        
+          - name: check out repo
+        uses: actions/checkout@v2
+      - name: azure login
+        uses: azure/login@v1
+        with:
+          creds: ${{secrets.AZURE_CREDENTIALS}}
+      - name: setup
+        run: bash setup.sh
+        working-directory: ./
+        continue-on-error: true
+      - name: run job
+        env:
+          DATA_SRC: ${{secrets.DATA_SRC}}
+        run: bash -x run-job.sh pipeline.yml --secret ${{ needs.run_pipeline.outputs.secret_output }}
+        working-directory: ./
