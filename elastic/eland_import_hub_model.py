@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 """
 Copies a model from the Hugging Face model hub into an Elasticsearch cluster.
 This will create local cached copies that will be traced (necessary) before
