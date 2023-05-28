@@ -27,7 +27,7 @@ def get_args():
     parser = argparse.ArgumentParser("huggingface")
     # parser.add_argument("--prepped_data", type=str, help="Path to raw data")
     parser.add_argument("--status_output", type=str, help="Path of prepped data")
-    # parser.add_argument("--zure_credentials", type=str, help="azure credentials")
+    parser.add_argument("--azure_credentials", type=str, help="azure credentials")
     args = parser.parse_args()
     return args
 def preprocess_data(examples, labels, tokenizer):
@@ -81,8 +81,8 @@ def perform_training():
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
 
-    azure_creds = os.environ.get('AZURE_CREDENTIALS')
-    logger.info("Testing logger by Iyad")
+    azure_creds = args.azure_credentials
+
 
     filename = os.listdir(args.prepped_data)
     dataset1 = pd.read_csv((Path(args.prepped_data) / filename[0]))
