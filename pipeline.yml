@@ -34,7 +34,6 @@ jobs:
     code: huggingface
     inputs:
       prepped_data: ${{parent.jobs.preprocess_data.outputs.transformed_data}}
-      azure_credentials: ${{ inputs.secret }}
     outputs:
       status_output:
         mode: upload

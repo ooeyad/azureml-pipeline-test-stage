@@ -25,9 +25,9 @@ tokenizer = None
 labels = []
 def get_args():
     parser = argparse.ArgumentParser("huggingface")
-    # parser.add_argument("--prepped_data", type=str, help="Path to raw data")
+    parser.add_argument("--prepped_data", type=str, help="Path to raw data")
     parser.add_argument("--status_output", type=str, help="Path of prepped data")
-    parser.add_argument("--azure_credentials", type=str, help="azure credentials")
+    # parser.add_argument("--azure_credentials", type=str, help="azure credentials")
     args = parser.parse_args()
     return args
 def preprocess_data(examples, labels, tokenizer):
