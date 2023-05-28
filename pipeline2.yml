@@ -13,4 +13,4 @@ jobs:
     command: >-
       python huggingface.py 
       --prepped_data ${{inputs.prepped_data}}
-      --status_output ${{outputs.status_output}}      
+      --status_output ${{outputs.status_output}}
