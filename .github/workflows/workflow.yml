@@ -44,5 +44,5 @@ jobs:
       - name: Run Pipeline
         env:
           DATA_SRC: ${{ secrets.DATA_SRC }}
-        run: bash -x run-job.sh pipeline.yml --secret ${{ parent.jobs.run_pipeline.outputs }}
+        run: bash -x run-job.sh pipeline.yml --secret ${{ steps.set_secret.outputs.secret_value }}
         working-directory: ./
