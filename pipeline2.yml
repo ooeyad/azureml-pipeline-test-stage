@@ -2,16 +2,17 @@ $schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
 type: pipeline
 display_name: Model Deployment to Elastic
 jobs:
-  elastic:
+  huggingface:
     type: command
-    code: elastic
-    environment: azureml:ElandRequirments@latest
+    code: huggingface
+    inputs:
+      prepped_data: "data"
+    outputs:
+      status_output:
+        mode: upload
+    environment: azureml:ModelTraining@latest
     compute: azureml:GPU002
     command: >-
-      python eland_import_hub_model2.py                                                           
-      --hub-model-id yashveer11/final_model_category
-      --cloud-id Elastic-05559-s-001:ZWFzdHVzMi5henVyZS5lbGFzdGljLWNsb3VkLmNvbTo0NDMkNDlhODhlNTg5YTBhNGJhZDkzNTA0NTFlYmVhZTg3OTckMDdlYjU1NzhjODdlNGI3MWI5NmIwNjY0ZmY3NWI4ODc=
-      --task-type text_classification
-      --es-api-key Y2FYbkxZZ0I2dGg1ZG05ZEw2S1A6SjMxR2dnWGZURHVlREpzT1FrZVp1QQ==
-      --clear-previous
-      --start
+      python huggingface.py 
+      --prepped_data ${{inputs.prepped_data}}
+      --status_output ${{outputs.status_output}}      
