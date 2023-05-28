@@ -21,6 +21,7 @@ from azure.identity import ClientSecretCredential
 import configparser
 import json
 
+
 tokenizer = None
 labels = []
 def get_args():
