@@ -11,6 +11,5 @@ jobs:
     environment: azureml:ModelTraining@latest
     compute: azureml:GPU002
     command: >-
-      python huggingface.py 
-      --prepped_data ${{inputs.prepped_data}}
+      python huggingface.py       
       --status_output ${{outputs.status_output}}
