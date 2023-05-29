@@ -22,8 +22,8 @@ class TestElandImportHubModel(unittest.TestCase):
         mock_argparser.assert_called_with()
 
     @patch('elastic.eland_import_hub_model.Elasticsearch', spec=Elasticsearch)
-    # @patch('elastic.eland_import_hub_model.get_azure_secret_value', return_value='123')
-    def test_get_es_client(self, mock_elasticsearch):
+    @patch('elastic.eland_import_hub_model.get_azure_secret_value', return_value='123')
+    def test_get_es_client(self,mock_azure_secret, mock_elasticsearch):
         # Create mock cli_args
         logging.basicConfig(format='%(asctime)s %(levelname)s : %(message)s')
         logger = logging.getLogger(__name__)
@@ -55,7 +55,8 @@ class TestElandImportHubModel(unittest.TestCase):
         self.assertEqual(result, mock_client)
 
     @patch('elastic.eland_import_hub_model.Elasticsearch', spec=Elasticsearch)
-    def test_get_es_client2(self, mock_elasticsearch):
+    @patch('elastic.eland_import_hub_model.get_azure_secret_value', return_value='123')
+    def test_get_es_client2(self,mock_azure_secret, mock_elasticsearch):
         # Create mock cli_args
         logging.basicConfig(format='%(asctime)s %(levelname)s : %(message)s')
         logger = logging.getLogger(__name__)
@@ -82,7 +83,7 @@ class TestElandImportHubModel(unittest.TestCase):
 
         # Assertions
         mock_elasticsearch.assert_called_with(request_timeout=300, verify_certs=True,
-                                              ca_certs=None, cloud_id='123', basic_auth=('myuser', 'mypassword'))
+                                              ca_certs=None, cloud_id='123', api_key='123')
         mock_client.info.assert_called_once()
         self.assertEqual(result, mock_client)
 
@@ -94,9 +95,12 @@ class TestElandImportHubModel(unittest.TestCase):
     @patch('elastic.eland_import_hub_model.TransformerModel')
     @patch('elastic.eland_import_hub_model.PyTorchModel')
     @patch('elastic.eland_import_hub_model.req.request')
-    def test_deploy_model_to_elastic(self, mock_request, mock_pytorch_model, mock_transformer_model,
+    @patch('elastic.eland_import_hub_model.get_azure_secret_value')
+
+    def test_deploy_model_to_elastic(self,mock_get_secret_value, mock_request, mock_pytorch_model, mock_transformer_model,
                                      mock_temporary_directory, mock_parser, mock_es_client, mock_es_model_check):
         # Mock the necessary objects and functions
+        mock_get_secret_value.return_value = '123'
         mock_temp_dir = mock_temporary_directory.return_value.__enter__.return_value
         mock_get_arg_parser = mock.Mock(return_value=mock.Mock(parse_args=mock.Mock(return_value=mock.Mock(
             url='http://example.com',
@@ -123,6 +127,7 @@ class TestElandImportHubModel(unittest.TestCase):
         mock_ptm.model_id = 'model-id'
         mock_ptm.elasticsearch_model_id.return_value = 'es-model-id'
         mock_pytorch_model.return_value = mock_ptm
+        # mock_os_environ.return_value = "{'tenantId':'123','clientId':'123','clientSecret':'123'}"
 
         # Set up the mocked TransformerModel
         model_path = "mock_model.pt"
@@ -148,11 +153,10 @@ class TestElandImportHubModel(unittest.TestCase):
         # mock_logger.info.assert_called_with("Model successfully imported with id 'model-id'")
         mock_tm.save.assert_called_with(mock_temp_dir)
 
-    @patch('elastic.eland_import_hub_model.configparser.ConfigParser')
     @patch('elastic.eland_import_hub_model.get_kv_secret')
     @patch('elastic.eland_import_hub_model.ClientSecretCredential', spec=ClientSecretCredential)
-
-    def test_get_azure_secret_value(self, mock_clientSecretCred, mock_get_kv_secret, mock_config_parser):
+    @patch('elastic.eland_import_hub_model.get_azure_credentials', return_value={'tenantId':'123','clientId':'123','clientSecret':'123'})
+    def test_get_azure_secret_value(self,mock_get_credentials, mock_clientSecretCred, mock_get_kv_secret):
         # Mock the return values
         mock_tenant_id = 'mock_tenant_id'
         mock_client_id = 'mock_client_id'
@@ -160,19 +164,15 @@ class TestElandImportHubModel(unittest.TestCase):
         mock_access_token = 'mock_access_token'
         mock_client = MagicMock(spec=ClientSecretCredential)
         mock_clientSecretCred.return_value = mock_client
-        mock_config = mock_config_parser.return_value
-        mock_config.get.return_value = mock_tenant_id, mock_client_id, mock_client_secret
+        creds = mock_get_credentials.return_value
 
         mock_get_kv_secret.return_value = mock_access_token
 
         # Call the function with a sample secret name
-        result = get_azure_secret_value('sample_secret')
+        result = get_azure_secret_value('sample_secret',creds)
 
         # Assert the expected behavior
         self.assertEqual(result, mock_access_token)
-        mock_config_parser.assert_called_once_with()
-        mock_config.read.assert_called_once_with('../azure.properties')
-        self.assertEqual(mock_config.get.call_count, 3)
 
 
 if __name__ == '__main__':

@@ -10,6 +10,7 @@ import sys
 sys.path.append("../")
 from huggingface.huggingface import perform_training, preprocess_data, compute_metrics
 import  huggingface
+from azure.identity import ClientSecretCredential
 
 class MockSecretClass():
     def __call__(self):
@@ -33,7 +34,7 @@ class TestYourScript(unittest.TestCase):
     @patch('sys.stdout', new_callable=StringIO)
     def test_perform_training(self, mock_stdout):
         # Mock the required dependencies or provide sample inputs
-        args = MockArgs(prepped_data='prepped_data', status_output='status_output',azure_credentials='{"tenant_id":"123", "client_id":"123", "client_secret":"123"}')
+        args = MockArgs(prepped_data='prepped_data', status_output='status_output',azure_credentials='{"tenantId":"123", "clientId":"123", "clientSecret":"123"}')
         filename = 'dataset.csv'
         dataset1 = pd.DataFrame({'CONCATENATED_TEXT': ['example text']})
 
@@ -43,6 +44,8 @@ class TestYourScript(unittest.TestCase):
                 patch('huggingface.huggingface.Dataset.from_dict') as mock_from_dict, \
                 patch('huggingface.huggingface.pd.DataFrame.to_csv', return_value=None), \
                 patch('huggingface.huggingface.AutoTokenizer.from_pretrained') as mock_from_pretrained, \
+                patch('huggingface.huggingface.ClientSecretCredential', spec=ClientSecretCredential) as mock_clientSecretCred, \
+                patch('huggingface.huggingface.get_azure_secret_value', return_value='123'), \
                 patch('huggingface.huggingface.Trainer') as mock_trainer:
             # Create a dummy instance of the Dataset class
             dataset1 = pd.DataFrame({'CONCATENATED_TEXT': ["testing", "testing2", "testing3", "testing4"], 'B': ["0", "1", "1", "0"]})
@@ -51,9 +54,11 @@ class TestYourScript(unittest.TestCase):
 
             # Mock the AutoTokenizer.from_pretrained method
             mock_tokenizer = mock_from_pretrained.return_value
+            mock_client = MagicMock(spec=ClientSecretCredential)
 
             # Mock the decode method of the tokenizer
             mock_decode = mock_tokenizer.decode
+            mock_clientSecretCred.return_value = mock_client
 
             # Set the return value of the mock DatasetDict
             dataset_dict = DatasetDict({"train": train, "test": train, "validation": train})
