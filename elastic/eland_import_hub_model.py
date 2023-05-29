@@ -138,11 +138,11 @@ def get_es_client(cli_args, logger):
             es_args['cloud_id'] = cli_args.cloud_id
 
         es_api_key = get_azure_secret_value("es-api-key",azure_creds)
-        es_username = get_azure_secret_value("es-username", azure_creds)
-        es_password = get_azure_secret_value("es-password", azure_creds)
+        # es_username = get_azure_secret_value("es-username", azure_creds)
+        # es_password = get_azure_secret_value("es-password", azure_creds)
 
         es_args['api_key'] = es_api_key
-        es_args['basic_auth'] = (es_username, es_password)
+        # es_args['basic_auth'] = (es_username, es_password)
 
         es_client = Elasticsearch(**es_args)
         es_info = es_client.info()
