@@ -18,7 +18,6 @@ from elastic_transport.client_utils import DEFAULT
 from elasticsearch import AuthenticationException, Elasticsearch
 from azure.keyvault.secrets import SecretClient
 from azure.identity import ClientSecretCredential
-import configparser
 import requests as req
 try:
     from eland.ml.pytorch import PyTorchModel
@@ -131,18 +130,13 @@ def get_es_client(cli_args, logger):
             'verify_certs': cli_args.insecure,
             'ca_certs': cli_args.ca_certs
         }
-
         azure_creds = os.environ.get("AZURE_CREDENTIALS")
 
         if cli_args.cloud_id:
             es_args['cloud_id'] = cli_args.cloud_id
 
         es_api_key = get_azure_secret_value("es-api-key",azure_creds)
-        # es_username = get_azure_secret_value("es-username", azure_creds)
-        # es_password = get_azure_secret_value("es-password", azure_creds)
-
         es_args['api_key'] = es_api_key
-        # es_args['basic_auth'] = (es_username, es_password)
 
         es_client = Elasticsearch(**es_args)
         es_info = es_client.info()
@@ -162,12 +156,9 @@ def deploy_model_to_elastic():
 
     # Parse arguments
     args = get_arg_parser().parse_args()
-    print("done parsing")
-
     # Connect to ES
     logger.info("Establishing connection to Elasticsearch")
     es = get_es_client(args, logger)
-
     # Trace and save model, then upload it from temp file
     with tempfile.TemporaryDirectory() as tmp_dir:
         logger.info(f"Loading HuggingFace transformer tokenizer and model '{args.hub_model_id}'")
@@ -219,7 +210,7 @@ def get_kv_secret(credential, secret_name):
     return access_token
 
 def get_azure_secret_value(secret_name, azure_credentials):
-    credentials = json.loads(azure_credentials)
+    credentials = get_azure_credentials(azure_credentials)
     # Access the connection values
     tenant_id = credentials['tenantId']
     client_id = credentials['clientId']
@@ -234,20 +225,10 @@ def get_kv_secret(credential, secret_name):
     secret_client = SecretClient(vault_url=vault_url, credential=credential)
     access_token = secret_client.get_secret(secret_name).value
     return access_token
-
-def get_azure_secret_value(secret_name, azure_credentials):
-
-    credentials = json.loads(azure_credentials)
-    # Access the connection values
-    tenant_id = credentials['tenantId']
-    client_id = credentials['clientId']
-    client_secret = credentials['clientSecret']
-    credential = ClientSecretCredential(tenant_id, client_id, client_secret)
-    # HuggingFace access token
-    access_token = get_kv_secret(credential, secret_name)
-    return access_token
 def check_es_model_exists(es, ptm):
     return es.options(ignore_status=404).ml.get_trained_models(model_id=ptm.model_id).meta.status
 
+def get_azure_credentials(str_azure_credentials):
+    return json.loads(str_azure_credentials)
 if __name__ == "__main__":
     deploy_model_to_elastic()
