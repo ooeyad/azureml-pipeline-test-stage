@@ -361,7 +361,6 @@ def prepare_cair_text(sql):
     print("Closed DB Connection")
     return df
 
-
 def prepare_voq_text(sql):
     connection = ibm_db.connect(
         PROD_DB,
