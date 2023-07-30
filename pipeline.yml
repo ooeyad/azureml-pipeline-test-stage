@@ -52,9 +52,9 @@ jobs:
     compute: azureml:GPU-05559-01
     command: >-
       python eland_import_hub_model.py                                                           
-      --hub-model-id yashveer11/final_model_category
+      --hub-model-id yashveer11/tuned_for_five_classes
       --cloud-id Elastic-05559-d-002:ZWFzdHVzLmF6dXJlLmVsYXN0aWMtY2xvdWQuY29tOjQ0MyQ0ODVjZTM5MzFmMWU0YjYzOTNmM2EyNTZkOTZiYTc1ZSQ3Njc4ZmQyZjA2NWI0YWM1OTRhYjVlMmVjMTMxYjI3Mw==
       --task-type text_classification
       --es-api-key 123
-      --clear-previous
-      --start
+#      --clear-previous
+#      --start
