@@ -43,6 +43,7 @@ def get_arg_parser():
     es_password = get_azure_secret_value("es-password",azure_creds)
     es_api_key = get_azure_secret_value("es-api-key",azure_creds)
 
+
     parser = argparse.ArgumentParser()
     location_args = parser.add_mutually_exclusive_group(required=True)
     location_args.add_argument(
