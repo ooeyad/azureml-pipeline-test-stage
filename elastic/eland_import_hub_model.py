@@ -48,7 +48,7 @@ def get_arg_parser():
     location_args = parser.add_mutually_exclusive_group(required=True)
     location_args.add_argument(
         "--cloud-id",
-        default="Elastic-05559-d-002:" + es_cloud_id,
+        default=es_cloud_id,
         help="Cloud ID as found in the 'Manage Deployment' page of an Elastic Cloud deployment",
     )
     parser.add_argument(
