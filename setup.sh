@@ -26,9 +26,9 @@ az extension add -n ml -y
 
 ## For backward compatibility - running on old subscription
 # <set_variables>
-GROUP="rg-05559-s-001"
+GROUP="rg-05559-d-002"
 LOCATION="eastus"
-WORKSPACE="azml-05559-s-001"
+WORKSPACE="azml-05559-d-001"
 # </set_variables>
 
 # If RESOURCE_GROUP_NAME is empty, the az configure is pending.
