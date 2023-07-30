@@ -47,7 +47,7 @@ def get_arg_parser():
     location_args = parser.add_mutually_exclusive_group(required=True)
     location_args.add_argument(
         "--cloud-id",
-        default="Elastic-05559-s-001:" + es_cloud_id,
+        default="Elastic-05559-d-002:" + es_cloud_id,
         help="Cloud ID as found in the 'Manage Deployment' page of an Elastic Cloud deployment",
     )
     parser.add_argument(
@@ -221,11 +221,6 @@ def get_azure_secret_value(secret_name, azure_credentials):
     access_token = get_kv_secret(credential, secret_name)
     return access_token
 
-def get_kv_secret(credential, secret_name):
-    vault_url = "https://kv-05559-s-adf.vault.azure.net"
-    secret_client = SecretClient(vault_url=vault_url, credential=credential)
-    access_token = secret_client.get_secret(secret_name).value
-    return access_token
 def check_es_model_exists(es, ptm):
     return es.options(ignore_status=404).ml.get_trained_models(model_id=ptm.model_id).meta.status
 
