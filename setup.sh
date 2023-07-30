@@ -26,7 +26,7 @@ az extension add -n ml -y
 
 ## For backward compatibility - running on old subscription
 # <set_variables>
-GROUP="rg-05559-d-002"
+GROUP="rg-05559-d-001"
 LOCATION="eastus"
 WORKSPACE="azml-05559-d-001"
 # </set_variables>
