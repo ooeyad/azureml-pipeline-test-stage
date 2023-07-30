@@ -9,7 +9,7 @@ jobs:
         mode: upload
     code: data
     environment: azureml:ModelTraining@latest
-    compute: azureml:cpu-cluster
+    compute: azureml:GPU-05559-01
     command: >-
       python read_data.py 
       --fetched_data ${{outputs.fetched_data}}
@@ -23,7 +23,7 @@ jobs:
         mode: upload
     code: prepare_data
     environment: azureml:ModelTraining@latest
-    compute: azureml:cpu-cluster
+    compute: azureml:GPU-05559-01
     command: >-
       python preprocessing.py 
       --real_data ${{inputs.real_data}}
@@ -38,7 +38,7 @@ jobs:
       status_output:
         mode: upload
     environment: azureml:ModelTraining@latest
-    compute: azureml:cpu-cluster
+    compute: azureml:GPU-05559-01
     command: >- 
       python huggingface.py 
       --prepped_data ${{inputs.prepped_data}}
