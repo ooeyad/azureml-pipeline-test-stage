@@ -9,7 +9,7 @@ jobs:
         mode: upload
     code: data
     environment: azureml:ModelTraining@latest
-    compute: azureml:githubcluster
+    compute: azureml:cpu-cluster
     command: >-
       python read_data.py 
       --fetched_data ${{outputs.fetched_data}}
@@ -23,7 +23,7 @@ jobs:
         mode: upload
     code: prepare_data
     environment: azureml:ModelTraining@latest
-    compute: azureml:githubcluster
+    compute: azureml:cpu-cluster
     command: >-
       python preprocessing.py 
       --real_data ${{inputs.real_data}}
@@ -38,7 +38,7 @@ jobs:
       status_output:
         mode: upload
     environment: azureml:ModelTraining@latest
-    compute: azureml:githubcluster
+    compute: azureml:cpu-cluster
     command: >- 
       python huggingface.py 
       --prepped_data ${{inputs.prepped_data}}
@@ -49,7 +49,7 @@ jobs:
     inputs:
       status_input: ${{parent.jobs.huggingface.outputs.status_output}}
     environment: azureml:ElandRequirments@latest
-    compute: azureml:githubcluster
+    compute: azureml:cpu-cluster
     command: >-
       python eland_import_hub_model.py                                                           
       --hub-model-id yashveer11/tuned_for_five_classes
