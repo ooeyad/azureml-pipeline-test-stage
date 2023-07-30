@@ -6,6 +6,7 @@ uploading to Elasticsearch. This will also check that the task type is supported
 as well as the model and tokenizer types. All necessary configuration is
 uploaded along with the model.
 """
+
 import argparse
 import logging
 import os
