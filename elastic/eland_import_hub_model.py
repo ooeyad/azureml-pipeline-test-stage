@@ -147,7 +147,6 @@ def get_es_client(cli_args, logger):
     except AuthenticationException as e:
         logger.error(e)
         exit(1)
-
 def deploy_model_to_elastic():
     # Configure logging
     logging.basicConfig(format='%(asctime)s %(levelname)s : %(message)s')
