@@ -8,7 +8,7 @@ jobs:
       fetched_data: 
         mode: upload
     code: data
-    environment: azureml:TestNew@latest
+    environment: azureml:ModelTraining@latest
     compute: azureml:GPU-05559-01
     command: >-
       python read_data.py 
@@ -22,7 +22,7 @@ jobs:
       transformed_data: 
         mode: upload
     code: prepare_data
-    environment: azureml:TestNew@latest
+    environment: azureml:ModelTraining@latest
     compute: azureml:GPU-05559-01
     command: >-
       python preprocessing.py 
@@ -37,7 +37,7 @@ jobs:
     outputs:
       status_output:
         mode: upload
-    environment: azureml:TestNew@latest
+    environment: azureml:ModelTraining@latest
     compute: azureml:GPU-05559-01
     command: >- 
       python huggingface.py 
@@ -54,9 +54,9 @@ jobs:
       python eland_import_hub_model.py
       --status_input ${{inputs.status_input}}
       --url https://485ce3931f1e4b6393f3a256d96ba75e.es.eastus.azure.elastic-cloud.com:9243
-      --cloud-id Elastic-05559-d-002:ZWFzdHVzLmF6dXJlLmVsYXN0aWMtY2xvdWQuY29tOjQ0MyQ0ODVjZTM5MzFmMWU0YjYzOTNmM2EyNTZkOTZiYTc1ZSQ3Njc4ZmQyZjA2NWI0YWM1OTRhYjVlMmVjMTMxYjI3Mw==
+#      --cloud-id Elastic-05559-d-002:ZWFzdHVzLmF6dXJlLmVsYXN0aWMtY2xvdWQuY29tOjQ0MyQ0ODVjZTM5MzFmMWU0YjYzOTNmM2EyNTZkOTZiYTc1ZSQ3Njc4ZmQyZjA2NWI0YWM1OTRhYjVlMmVjMTMxYjI3Mw==
       --hub-model-id yashveer11/final_model_category
       --task-type text_classification
-      --es-api-key ApiKey NzE1N0RJVUJXa2pPVFJ6bFFZeUg6dlJrUHNmLVJTX0tmdXMwczdqSHprUQ==
+#      --es-api-key ApiKey NzE1N0RJVUJXa2pPVFJ6bFFZeUg6dlJrUHNmLVJTX0tmdXMwczdqSHprUQ==
       --clear-previous
       --start
