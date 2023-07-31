@@ -29,6 +29,7 @@ az extension add -n ml -y
 GROUP="rg-05559-d-001"
 LOCATION="eastus"
 WORKSPACE="azml-05559-d-001"
+
 # </set_variables>
 
 # If RESOURCE_GROUP_NAME is empty, the az configure is pending.
