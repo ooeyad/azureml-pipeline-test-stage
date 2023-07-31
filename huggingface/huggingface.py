@@ -117,7 +117,8 @@ def perform_training():
 
     # [id2label[idx] for idx, label in enumerate(example['labels']) if label == 1.0]
     encoded_dataset.set_format("torch")
-
+    logger.info("Azure Creds: ")
+    logger.info(azure_creds)
     # Set the Azure Active Directory tenant ID, client ID, and client secret
     access_token = get_azure_secret_value("hfAccessToken",azure_creds)
     login(access_token)
