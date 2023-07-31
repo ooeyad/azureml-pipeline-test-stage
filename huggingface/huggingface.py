@@ -121,7 +121,6 @@ def perform_training():
     # Set the Azure Active Directory tenant ID, client ID, and client secret
     access_token = get_azure_secret_value("hfAccessToken",azure_creds)
     login(access_token)
-
     model = AutoModelForSequenceClassification.from_pretrained("yashveer11/final_model_category",
                                                                 problem_type="multi_label_classification",
                                                                 num_labels=len(labels),
