@@ -3,7 +3,7 @@ on:
   pull_request:
     branches:
       - main
-      - sdk-preview
+      - sdk-preview*
   push:
     branches:
       - main
