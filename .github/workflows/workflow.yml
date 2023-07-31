@@ -1,9 +1,12 @@
 name: testing_pipeline
-on:
+on:     
   pull_request:
     branches:
       - main
       - sdk-preview
+  push:
+    branches:
+      - main
     paths:
       - .github/workflows/workflow.yml
       - ./setup.sh
