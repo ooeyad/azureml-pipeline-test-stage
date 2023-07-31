@@ -171,7 +171,7 @@ def perform_training():
     trainer.train()
     trainer.push_to_hub("End of training")
 def get_kv_secret(credential, secret_name):
-    vault_url = "https://kv-05559-s-adf.vault.azure.net"
+    vault_url = "https://kv-05559-d-adf.vault.azure.net"
     secret_client = SecretClient(vault_url=vault_url, credential=credential)
     access_token = secret_client.get_secret(secret_name).value
     return access_token
@@ -179,8 +179,6 @@ def get_kv_secret(credential, secret_name):
 def get_azure_secret_value(secret_name, azure_credentials,logger):
 
     credentials = json.loads(azure_credentials)
-    logger.info("azure credentials inside get_azure_secret_value : ")
-    logger.info(credentials)
     # Access the connection values
     tenant_id = credentials['tenantId']
     client_id = credentials['clientId']
