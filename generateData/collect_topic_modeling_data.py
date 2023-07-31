@@ -258,11 +258,6 @@ VOQ_TEXT_SQL  = """select e.C_NVQ_ODINO ODI_NO,
                          e.C_NVQ_COMPDESC VOQ_COMP                 
                     from DB2DAP.EDAPNVQ e where e.C_NVQ_ODINO in ({IDS}) with ur"""
 
-PROD_DB = f"DATABASE=DAPIS;HOSTNAME=srvr2274.dbms.chrysler.com;PORT=22740;PROTOCOL=TCPIP;UID=T6805I0;PWD=Jordan54321@;"
-DEV_DB = f"DATABASE=DAPIS;HOSTNAME=srvr2197.dbms.chrysler.com;PORT=21970;PROTOCOL=TCPIP;UID=db2dap;PWD=dcx1971;"
-SALESFORCE_DB = f"DATABASE=SFDCODPA;HOSTNAME=srvr3059.dbms.chrysler.com;PORT=30590;PROTOCOL=TCPIP;UID=db2dap;PWD=WULxA7QY7W5WY1#;"
-
-
 def get_text_from_file(file_name):
     if file_name != "(null)":
         start = "CAIR_reports\\"
