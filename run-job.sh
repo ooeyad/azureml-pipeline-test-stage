@@ -3,16 +3,13 @@ if [[ -z "$2" ]]
   then
     if [[ "$job" =~ pipeline.yml ]]
     then
-#      run_id=$(az ml job create -f $job --query name -o tsv --set settings.force_rerun=True --debug)
-      run_id=$(az ml job create -f $job --query name -o tsv --set settings.force_rerun=True)
+      run_id=$(az ml job create -f $job --query name -o tsv --set settings.force_rerun=True --debug)
     else
-#      run_id=$(az ml job create -f $job --query name -o tsv --debug)
-      run_id=$(az ml job create -f $job --query name -o tsv)
+      run_id=$(az ml job create -f $job --query name -o tsv --debug)
     fi
   else
     experiment_name=$2
-#    run_id=$(az ml job create -f $job --query name -o tsv --set experiment_name=$experiment_name --set settings.force_rerun=True --debug)
-    run_id=$(az ml job create -f $job --query name -o tsv --set experiment_name=$experiment_name --set settings.force_rerun=True)
+    run_id=$(az ml job create -f $job --query name -o tsv --set experiment_name=$experiment_name --set settings.force_rerun=True --debug)
 fi
 
 if [[ -z "$3" ]]
