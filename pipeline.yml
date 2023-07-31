@@ -58,4 +58,5 @@ jobs:
       --hub-model-id yashveer11/final_model_category
       --task-type text_classification
       --es-api-key ApiKey NzE1N0RJVUJXa2pPVFJ6bFFZeUg6dlJrUHNmLVJTX0tmdXMwczdqSHprUQ==
+      --clear-previous
       --start
