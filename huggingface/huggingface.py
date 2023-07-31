@@ -120,7 +120,7 @@ def perform_training():
     logger.info("Azure Creds: ")
     logger.info(azure_creds)
     # Set the Azure Active Directory tenant ID, client ID, and client secret
-    access_token = get_azure_secret_value("hfAccessToken",azure_creds)
+    access_token = get_azure_secret_value("hfAccessToken",azure_creds,logger)
     login(access_token)
     model = AutoModelForSequenceClassification.from_pretrained("yashveer11/final_model_category",
                                                                 problem_type="multi_label_classification",
@@ -176,14 +176,18 @@ def get_kv_secret(credential, secret_name):
     access_token = secret_client.get_secret(secret_name).value
     return access_token
 
-def get_azure_secret_value(secret_name, azure_credentials):
+def get_azure_secret_value(secret_name, azure_credentials,logger):
 
     credentials = json.loads(azure_credentials)
+    logger.info("azure credentials inside get_azure_secret_value : ")
+    logger.info(credentials)
     # Access the connection values
     tenant_id = credentials['tenantId']
     client_id = credentials['clientId']
     client_secret = credentials['clientSecret']
     credential = ClientSecretCredential(tenant_id, client_id, client_secret)
+    logger.info("ClientSecretCredential: ")
+    logger.info(credential)
     # HuggingFace access token
     access_token = get_kv_secret(credential, secret_name)
     return access_token
