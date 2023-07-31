@@ -36,12 +36,12 @@ proxies = {
     'aiproxy.appl.chrysler.com:9080'
 }
 
-def get_arg_parser():
+def get_arg_parser(logger):
     azure_creds = os.environ.get("AZURE_CREDENTIALS")
-    es_cloud_id = get_azure_secret_value("es-cloud-id",azure_creds)
-    es_username = get_azure_secret_value("es-username",azure_creds)
-    es_password = get_azure_secret_value("es-password",azure_creds)
-    es_api_key = get_azure_secret_value("es-api-key",azure_creds)
+    es_cloud_id = get_azure_secret_value("es-cloud-id",azure_creds,logger)
+    es_username = get_azure_secret_value("es-username",azure_creds,logger)
+    es_password = get_azure_secret_value("es-password",azure_creds,logger)
+    es_api_key = get_azure_secret_value("es-api-key",azure_creds,logger)
 
 
     parser = argparse.ArgumentParser()
@@ -137,7 +137,7 @@ def get_es_client(cli_args, logger):
         if cli_args.cloud_id:
             es_args['cloud_id'] = cli_args.cloud_id
 
-        es_api_key = get_azure_secret_value("es-api-key",azure_creds)
+        es_api_key = get_azure_secret_value("es-api-key",azure_creds,logger)
         es_args['api_key'] = es_api_key
 
         es_client = Elasticsearch(**es_args)
@@ -155,7 +155,7 @@ def deploy_model_to_elastic():
 
 
     # Parse arguments
-    args = get_arg_parser().parse_args()
+    args = get_arg_parser(logger).parse_args()
     # Connect to ES
     logger.info("Establishing connection to Elasticsearch")
     es = get_es_client(args, logger)
@@ -203,15 +203,16 @@ def deploy_model_to_elastic():
 
     logger.info(f"Model successfully imported with id '{ptm.model_id}'")
 
-def get_kv_secret(credential, secret_name):
+def get_kv_secret(credential, secret_name,logger):
     vault_url = "https://kv-05559-d-adf.vault.azure.net"
     secret_client = SecretClient(vault_url=vault_url, credential=credential)
-    print("Secret Client: ")
-    print(secret_client)
+    logger.info(secret_name)
+    logger.info("Secret Client: ")
+    logger.info(secret_client)
     access_token = secret_client.get_secret(secret_name).value
     return access_token
 
-def get_azure_secret_value(secret_name, azure_credentials):
+def get_azure_secret_value(secret_name, azure_credentials,logger):
     credentials = get_azure_credentials(azure_credentials)
     # Access the connection values
     tenant_id = credentials['tenantId']
@@ -219,7 +220,7 @@ def get_azure_secret_value(secret_name, azure_credentials):
     client_secret = credentials['clientSecret']
     credential = ClientSecretCredential(tenant_id, client_id, client_secret)
     # HuggingFace access token
-    access_token = get_kv_secret(credential, secret_name)
+    access_token = get_kv_secret(credential, secret_name,logger)
     return access_token
 
 def check_es_model_exists(es, ptm):
