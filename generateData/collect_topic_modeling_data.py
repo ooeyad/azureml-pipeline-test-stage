@@ -258,7 +258,6 @@ VOQ_TEXT_SQL  = """select e.C_NVQ_ODINO ODI_NO,
                          e.C_NVQ_COMPDESC VOQ_COMP                 
                     from DB2DAP.EDAPNVQ e where e.C_NVQ_ODINO in ({IDS}) with ur"""
 
-
 def get_text_from_file(file_name):
     if file_name != "(null)":
         start = "CAIR_reports\\"
