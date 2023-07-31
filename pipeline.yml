@@ -51,7 +51,7 @@ jobs:
     environment: azureml:ElandRequirments@latest
     compute: azureml:GPU-05559-01
     command: >-
-      python eland_import_hub_model.py
+      python eland_import_hub_model2.py
       --status_input ${{inputs.status_input}}
       --url https://485ce3931f1e4b6393f3a256d96ba75e.es.eastus.azure.elastic-cloud.com:9243
       --cloud-id Elastic-05559-d-002:ZWFzdHVzLmF6dXJlLmVsYXN0aWMtY2xvdWQuY29tOjQ0MyQ0ODVjZTM5MzFmMWU0YjYzOTNmM2EyNTZkOTZiYTc1ZSQ3Njc4ZmQyZjA2NWI0YWM1OTRhYjVlMmVjMTMxYjI3Mw==
