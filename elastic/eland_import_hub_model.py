@@ -143,7 +143,6 @@ def get_es_client(cli_args, logger):
         es_client = Elasticsearch(**es_args)
         es_info = es_client.info()
         logger.info(f"Connected to cluster named '{es_info['cluster_name']}' (version: {es_info['version']['number']})")
-
         return es_client
     except AuthenticationException as e:
         logger.error(e)
