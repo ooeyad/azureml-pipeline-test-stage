@@ -180,7 +180,8 @@ def deploy_model_to_elastic():
                     logger.info(f"Stopping deployment for model with id '{ptm.model_id}'")
                     es.ml.stop_trained_model_deployment(model_id=ptm.model_id, force=True)
                     logger.info(f"Deleting model with id '{ptm.model_id}'")
-                    ptm.delete()
+                    # ptm.delete()
+                    es.ml.delete_trained_model(model_id=ptm.model_id,force=True)
                 except elasticsearch.ConflictError as err:
                     logger.warning(
                         f"ConflictError: Cannot stop deployment '{ptm.model_id}' as it is referenced by ingest processors."
