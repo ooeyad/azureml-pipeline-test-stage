@@ -17,6 +17,7 @@ import json
 
 from elastic_transport.client_utils import DEFAULT
 from elasticsearch import AuthenticationException, Elasticsearch
+import elasticsearch
 from azure.keyvault.secrets import SecretClient
 from azure.identity import ClientSecretCredential
 import requests as req
@@ -176,11 +177,15 @@ def deploy_model_to_elastic():
 
         if model_exists:
             if args.clear_previous:
-                logger.info(f"Stopping deployment for model with id '{ptm.model_id}'")
-                ptm.stop(force=True)
-
-                logger.info(f"Deleting model with id '{ptm.model_id}'")
-                ptm.delete()
+                try:
+                    logger.info(f"Stopping deployment for model with id '{ptm.model_id}'")
+                    es.ml.stop_trained_model_deployment(model_id=ptm.model_id, force=True)
+                except elasticsearch.ConflictError as err:
+                    logger.warning(
+                        f"ConflictError: Cannot stop deployment '{ptm.model_id}' as it is referenced by ingest processors."
+                    )
+                    logger.warning("Consider removing references from ingest processors.")
+                    exit(1)
             else:
                 logger.error(f"Trained model with id '{ptm.model_id}' already exists")
                 logger.info(
