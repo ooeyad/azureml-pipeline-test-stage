@@ -56,4 +56,3 @@ jobs:
       --hub-model-id yashveer11/final_model_category
       --task-type text_classification
       --clear-previous
-      --start
