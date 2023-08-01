@@ -210,7 +210,6 @@ def deploy_model_to_elastic():
         ptm.start()
 
     logger.info(f"Model successfully imported with id '{ptm.model_id}'")
-
 def get_kv_secret(credential, secret_name,logger):
     vault_url = "https://kv-05559-d-adf.vault.azure.net"
     secret_client = SecretClient(vault_url=vault_url, credential=credential)
