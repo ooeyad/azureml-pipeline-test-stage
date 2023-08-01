@@ -19,6 +19,7 @@ import elasticsearch
 from elasticsearch import AuthenticationException, Elasticsearch
 from azure.keyvault.secrets import SecretClient
 from azure.identity import ClientSecretCredential
+import time
 import requests as req
 try:
     from eland.ml.pytorch import PyTorchModel
@@ -194,6 +195,10 @@ def deploy_model_to_elastic():
                 logger.info(
                     "Run the script with the '--clear-previous' flag if you want to overwrite the existing model.")
                 exit(1)
+
+        wait_time_seconds = 10
+        logger.info(f"Waiting for {wait_time_seconds} seconds before starting model deployment.")
+        time.sleep(wait_time_seconds)
 
         logger.info(f"Creating model with id '{ptm.model_id}'")
         ptm.put_config(config=config)
