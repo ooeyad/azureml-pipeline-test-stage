@@ -177,7 +177,7 @@ def deploy_model_to_elastic():
         if model_exists:
             if args.clear_previous:
                 logger.info(f"Stopping deployment for model with id '{ptm.model_id}'")
-                ptm.stop()
+                ptm.stop(force=True)
 
                 logger.info(f"Deleting model with id '{ptm.model_id}'")
                 ptm.delete()
