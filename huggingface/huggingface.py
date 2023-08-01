@@ -134,10 +134,10 @@ def perform_training():
     from huggingface_hub import HfApi
     hf_api = HfApi()
 
-    model_exists = "yashveer11/testing_class" in [model.modelId for model in hf_api.list_models()]
+    model_exists = "yashveer11/final_model_category" in [model.modelId for model in hf_api.list_models()]
     my_model = ''
     if model_exists:
-        delete_repo(repo_id="yashveer11/testing_class")
+        delete_repo(repo_id="yashveer11/final_model_category")
     args = TrainingArguments(
         f"testing_class",
         evaluation_strategy="epoch",
@@ -150,7 +150,7 @@ def perform_training():
         load_best_model_at_end=True,
         metric_for_best_model=metric_name,
         push_to_hub=True,
-        hub_model_id="yashveer11/testing_class"
+        hub_model_id="yashveer11/final_model_category"
     )
 
     encoded_dataset['train'][0]['labels'].type()
