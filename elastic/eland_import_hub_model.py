@@ -196,7 +196,7 @@ def deploy_model_to_elastic():
                     "Run the script with the '--clear-previous' flag if you want to overwrite the existing model.")
                 exit(1)
 
-        wait_time_seconds = 10
+        wait_time_seconds = 60
         logger.info(f"Waiting for {wait_time_seconds} seconds before starting model deployment.")
         time.sleep(wait_time_seconds)
 
