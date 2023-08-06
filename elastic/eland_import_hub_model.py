@@ -218,9 +218,6 @@ def deploy_model_to_elastic():
 def get_kv_secret(credential, secret_name,logger):
     vault_url = "https://kv-05559-d-adf.vault.azure.net"
     secret_client = SecretClient(vault_url=vault_url, credential=credential)
-    logger.info(secret_name)
-    logger.info("Secret Client: ")
-    logger.info(secret_client)
     access_token = secret_client.get_secret(secret_name).value
     return access_token
 
